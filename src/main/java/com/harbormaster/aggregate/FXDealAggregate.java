@@ -72,7 +72,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateFXDealEvent</li>
  *      <li>DeleteFXDealEvent</li>
    *       <li>AssignQuoteToFXDealEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignQuoteFromFXDealEvent</li>
    *       <li>AssignPaymentOrdersToFXDealEvent</li>
  *       <li>RemovePaymentOrdersFromFXDealEvent</li>
   *        </ul>
@@ -231,7 +231,7 @@ public class FXDealAggregate {
     private String quoteCurrency;
     private java.math.BigDecimal rate;
     private Money amount;
-    private Date settlementDate;
+    private  Date settlementDate;
     private FXDealStatus status;
     private FXQuote quote = null;
     private Set<PaymentOrder> paymentOrders = new HashSet<>();

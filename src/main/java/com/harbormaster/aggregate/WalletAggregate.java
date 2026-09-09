@@ -72,7 +72,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateWalletEvent</li>
  *      <li>DeleteWalletEvent</li>
    *       <li>AssignCustomerToWalletEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCustomerFromWalletEvent</li>
    *       <li>AssignTransactionsToWalletEvent</li>
  *       <li>RemoveTransactionsFromWalletEvent</li>
   *        </ul>

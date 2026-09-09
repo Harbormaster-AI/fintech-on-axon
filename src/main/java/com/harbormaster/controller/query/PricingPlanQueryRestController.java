@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/PricingPlanQuery")
 public class PricingPlanQueryRestController extends BaseSpringRestController {
 	
+	public PricingPlanQueryRestController( PricingPlanService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a PricingPlan using a UUID
      * @param		UUID pricingPlanId
@@ -95,7 +99,7 @@ public class PricingPlanQueryRestController extends BaseSpringRestController {
     	PricingPlan entity = null;
 
     	try {  
-    		entity = PricingPlanService.getPricingPlanInstance().getPricingPlan( new PricingPlanFetchOneSummary( pricingPlanId ) );
+    		entity = service.getPricingPlan( new PricingPlanFetchOneSummary( pricingPlanId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load PricingPlan using Id " + pricingPlanId );
@@ -115,7 +119,7 @@ public class PricingPlanQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the PricingPlan
-            pricingPlanList = PricingPlanService.getPricingPlanInstance().getAllPricingPlan();
+            pricingPlanList = service.getAllPricingPlan();
             
             if ( pricingPlanList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all PricingPlans" );
@@ -135,6 +139,7 @@ public class PricingPlanQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected PricingPlan pricingPlan = null;
+    protected PricingPlanService service = null;
     private static final Logger LOGGER = Logger.getLogger(PricingPlanQueryRestController.class.getName());
     
 }

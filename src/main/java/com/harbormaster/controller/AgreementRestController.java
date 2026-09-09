@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Agreement")
 public class AgreementRestController extends BaseSpringRestController {
 
+	public AgreementRestController( AgreementService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Agreement.  if not key provided, calls create, otherwise calls save
      * @param		Agreement	agreement
@@ -94,7 +98,7 @@ public class AgreementRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = AgreementService.getAgreementInstance().createAgreement( command );
+			completableFuture = service.createAgreement( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class AgreementRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateAgreementCommand
 			// -----------------------------------------------
-			completableFuture = AgreementService.getAgreementInstance().updateAgreement(command);;
+			completableFuture = service.updateAgreement(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "AgreementController:update() - successfully update Agreement - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class AgreementRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteAgreementCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	AgreementService delegate = AgreementService.getAgreementInstance();
+        	AgreementService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Agreement with key " + command.getAgreementId() );
@@ -155,7 +159,7 @@ public class AgreementRestController extends BaseSpringRestController {
     	Agreement entity = null;
 
     	try {  
-    		entity = AgreementService.getAgreementInstance().getAgreement( new AgreementFetchOneSummary( uuid ) );   
+    		entity = service.getAgreement( new AgreementFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Agreement using Id " + uuid );
@@ -175,7 +179,7 @@ public class AgreementRestController extends BaseSpringRestController {
         
     	try {
             // load the Agreement
-            agreementList = AgreementService.getAgreementInstance().getAllAgreement();
+            agreementList = service.getAllAgreement();
             
             if ( agreementList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Agreements" );
@@ -196,7 +200,7 @@ public class AgreementRestController extends BaseSpringRestController {
 	@PutMapping("/assignCustomer")
 	public void assignCustomer( @RequestBody AssignCustomerToAgreementCommand command ) {
 		try {
-			AgreementService.getAgreementInstance().assignCustomer( command );   
+			service.assignCustomer( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Customer", exc );
@@ -210,7 +214,7 @@ public class AgreementRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignCustomer")
 	public void unAssignCustomer( @RequestBody(required=true)  UnAssignCustomerFromAgreementCommand command ) {
 		try {
-			AgreementService.getAgreementInstance().unAssignCustomer( command );   
+			service.unAssignCustomer( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Customer", exc );
@@ -224,7 +228,7 @@ public class AgreementRestController extends BaseSpringRestController {
 	@PutMapping("/assignProductOffering")
 	public void assignProductOffering( @RequestBody AssignProductOfferingToAgreementCommand command ) {
 		try {
-			AgreementService.getAgreementInstance().assignProductOffering( command );   
+			service.assignProductOffering( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign ProductOffering", exc );
@@ -238,7 +242,7 @@ public class AgreementRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignProductOffering")
 	public void unAssignProductOffering( @RequestBody(required=true)  UnAssignProductOfferingFromAgreementCommand command ) {
 		try {
-			AgreementService.getAgreementInstance().unAssignProductOffering( command );   
+			service.unAssignProductOffering( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign ProductOffering", exc );
@@ -253,6 +257,7 @@ public class AgreementRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Agreement agreement = null;
-    private static final Logger LOGGER = Logger.getLogger(AgreementRestController.class.getName());
+	protected AgreementService service = null;
+	private static final Logger LOGGER = Logger.getLogger(AgreementRestController.class.getName());
     
 }

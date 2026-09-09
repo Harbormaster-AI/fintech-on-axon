@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/PaymentContractQuery")
 public class PaymentContractQueryRestController extends BaseSpringRestController {
 	
+	public PaymentContractQueryRestController( PaymentContractService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a PaymentContract using a UUID
      * @param		UUID paymentContractId
@@ -95,7 +99,7 @@ public class PaymentContractQueryRestController extends BaseSpringRestController
     	PaymentContract entity = null;
 
     	try {  
-    		entity = PaymentContractService.getPaymentContractInstance().getPaymentContract( new PaymentContractFetchOneSummary( paymentContractId ) );
+    		entity = service.getPaymentContract( new PaymentContractFetchOneSummary( paymentContractId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load PaymentContract using Id " + paymentContractId );
@@ -115,7 +119,7 @@ public class PaymentContractQueryRestController extends BaseSpringRestController
         
     	try {
             // load the PaymentContract
-            paymentContractList = PaymentContractService.getPaymentContractInstance().getAllPaymentContract();
+            paymentContractList = service.getAllPaymentContract();
             
             if ( paymentContractList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all PaymentContracts" );
@@ -135,6 +139,7 @@ public class PaymentContractQueryRestController extends BaseSpringRestController
 // Attributes
 //************************************************************************
     protected PaymentContract paymentContract = null;
+    protected PaymentContractService service = null;
     private static final Logger LOGGER = Logger.getLogger(PaymentContractQueryRestController.class.getName());
     
 }

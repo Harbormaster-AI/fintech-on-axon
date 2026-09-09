@@ -86,7 +86,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateInvestmentPortfolioEvent</li>
  *      <li>DeleteInvestmentPortfolioEvent</li>
    *       <li>AssignCustomerToInvestmentPortfolioEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCustomerFromInvestmentPortfolioEvent</li>
    *       <li>AssignAccountsToInvestmentPortfolioEvent</li>
  *       <li>RemoveAccountsFromInvestmentPortfolioEvent</li>
   *       <li>AssignOrdersToInvestmentPortfolioEvent</li>

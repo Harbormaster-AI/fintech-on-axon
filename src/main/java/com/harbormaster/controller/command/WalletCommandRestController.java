@@ -100,7 +100,6 @@ public class WalletCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateWalletCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createWallet( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class WalletCommandRestController extends BaseSpringRestController {
 		DeleteWalletCommand command = new DeleteWalletCommand( walletId );
 
     	try {
-        	WalletService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Wallet with key " + command.getWalletId() );
         }
         catch( Throwable exc ) {

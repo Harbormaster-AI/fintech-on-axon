@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/ScreeningQuery")
 public class ScreeningQueryRestController extends BaseSpringRestController {
 	
+	public ScreeningQueryRestController( ScreeningService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Screening using a UUID
      * @param		UUID screeningId
@@ -95,7 +99,7 @@ public class ScreeningQueryRestController extends BaseSpringRestController {
     	Screening entity = null;
 
     	try {  
-    		entity = ScreeningService.getScreeningInstance().getScreening( new ScreeningFetchOneSummary( screeningId ) );
+    		entity = service.getScreening( new ScreeningFetchOneSummary( screeningId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Screening using Id " + screeningId );
@@ -115,7 +119,7 @@ public class ScreeningQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Screening
-            screeningList = ScreeningService.getScreeningInstance().getAllScreening();
+            screeningList = service.getAllScreening();
             
             if ( screeningList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Screenings" );
@@ -135,6 +139,7 @@ public class ScreeningQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Screening screening = null;
+    protected ScreeningService service = null;
     private static final Logger LOGGER = Logger.getLogger(ScreeningQueryRestController.class.getName());
     
 }

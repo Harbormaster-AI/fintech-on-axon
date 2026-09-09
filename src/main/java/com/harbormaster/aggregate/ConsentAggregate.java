@@ -67,9 +67,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateConsentEvent</li>
  *      <li>DeleteConsentEvent</li>
    *       <li>AssignCustomerToConsentEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCustomerFromConsentEvent</li>
   *       <li>AssignApiClientToConsentEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignApiClientFromConsentEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

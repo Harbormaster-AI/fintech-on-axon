@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/TerminalQuery")
 public class TerminalQueryRestController extends BaseSpringRestController {
 	
+	public TerminalQueryRestController( TerminalService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Terminal using a UUID
      * @param		UUID terminalId
@@ -95,7 +99,7 @@ public class TerminalQueryRestController extends BaseSpringRestController {
     	Terminal entity = null;
 
     	try {  
-    		entity = TerminalService.getTerminalInstance().getTerminal( new TerminalFetchOneSummary( terminalId ) );
+    		entity = service.getTerminal( new TerminalFetchOneSummary( terminalId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Terminal using Id " + terminalId );
@@ -115,7 +119,7 @@ public class TerminalQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Terminal
-            terminalList = TerminalService.getTerminalInstance().getAllTerminal();
+            terminalList = service.getAllTerminal();
             
             if ( terminalList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Terminals" );
@@ -135,6 +139,7 @@ public class TerminalQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Terminal terminal = null;
+    protected TerminalService service = null;
     private static final Logger LOGGER = Logger.getLogger(TerminalQueryRestController.class.getName());
     
 }

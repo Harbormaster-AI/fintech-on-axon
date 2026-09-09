@@ -81,9 +81,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdatePaymentCardEvent</li>
  *      <li>DeletePaymentCardEvent</li>
    *       <li>AssignCustomerToPaymentCardEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCustomerFromPaymentCardEvent</li>
   *       <li>AssignAccountToPaymentCardEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignAccountFromPaymentCardEvent</li>
    *       <li>AssignTokenizationsToPaymentCardEvent</li>
  *       <li>RemoveTokenizationsFromPaymentCardEvent</li>
   *       <li>AssignDisputesToPaymentCardEvent</li>
@@ -306,8 +306,8 @@ public class PaymentCardAggregate {
     
     private CardNumberToken cardToken;
     private String maskedPan;
-    private Integer expiryMonth;
-    private Integer expiryYear;
+    private int expiryMonth;
+    private int expiryYear;
     private String cardholderName;
     private CardScheme scheme;
     private CardStatus status;

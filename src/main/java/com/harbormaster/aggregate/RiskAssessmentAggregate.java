@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateRiskAssessmentEvent</li>
  *      <li>DeleteRiskAssessmentEvent</li>
    *       <li>AssignApplicationToRiskAssessmentEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignApplicationFromRiskAssessmentEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

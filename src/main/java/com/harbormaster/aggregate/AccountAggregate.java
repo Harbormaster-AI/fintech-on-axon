@@ -95,9 +95,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateAccountEvent</li>
  *      <li>DeleteAccountEvent</li>
    *       <li>AssignCustomerToAccountEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCustomerFromAccountEvent</li>
   *       <li>AssignInstitutionToAccountEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignInstitutionFromAccountEvent</li>
    *       <li>AssignTransactionsToAccountEvent</li>
  *       <li>RemoveTransactionsFromAccountEvent</li>
   *       <li>AssignCardsToAccountEvent</li>
@@ -395,7 +395,7 @@ public class AccountAggregate {
     private AccountNumber accountNumber;
     private IBAN iban;
     private BIC bic;
-    private Date openedDate;
+    private  Date openedDate;
     private String currency;
     private Money balance;
     private Money availableBalance;

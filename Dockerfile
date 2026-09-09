@@ -5,8 +5,8 @@ LABEL org.opencontainers.image.title="fintechOnAxon"
 LABEL org.opencontainers.image.version="0.0.1"
 LABEL com.harbormaster.blueprint="Axon4-Framework-Server"
 LABEL com.harbormaster.model="FinTech Industry Domain Model"
-LABEL com.harbormaster.generated="2026-09-08"
-#LABEL com.harbormaster.certification="58dafe2d-0df8-4adb-b744-4f2a3d022cc4"
+LABEL com.harbormaster.generated="2026-09-09"
+#LABEL com.harbormaster.certification="ff824a5f-0a33-44df-99ce-9cf529d55d73"
 
 RUN addgroup -S spring && adduser -S -G spring spring
 USER spring:spring

@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateAccountStatementEvent</li>
  *      <li>DeleteAccountStatementEvent</li>
    *       <li>AssignAccountToAccountStatementEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignAccountFromAccountStatementEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>
@@ -183,8 +183,8 @@ public class AccountStatementAggregate {
     private UUID accountStatementId;
     
     private String statementNumber;
-    private Date periodStart;
-    private Date periodEnd;
+    private  Date periodStart;
+    private  Date periodEnd;
     private Money openingBalance;
     private Money closingBalance;
     private DateTime generatedAt;

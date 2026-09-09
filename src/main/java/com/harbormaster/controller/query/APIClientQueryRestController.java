@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/APIClientQuery")
 public class APIClientQueryRestController extends BaseSpringRestController {
 	
+	public APIClientQueryRestController( APIClientService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a APIClient using a UUID
      * @param		UUID aPIClientId
@@ -95,7 +99,7 @@ public class APIClientQueryRestController extends BaseSpringRestController {
     	APIClient entity = null;
 
     	try {  
-    		entity = APIClientService.getAPIClientInstance().getAPIClient( new APIClientFetchOneSummary( aPIClientId ) );
+    		entity = service.getAPIClient( new APIClientFetchOneSummary( aPIClientId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load APIClient using Id " + aPIClientId );
@@ -115,7 +119,7 @@ public class APIClientQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the APIClient
-            aPIClientList = APIClientService.getAPIClientInstance().getAllAPIClient();
+            aPIClientList = service.getAllAPIClient();
             
             if ( aPIClientList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all APIClients" );
@@ -135,6 +139,7 @@ public class APIClientQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected APIClient aPIClient = null;
+    protected APIClientService service = null;
     private static final Logger LOGGER = Logger.getLogger(APIClientQueryRestController.class.getName());
     
 }

@@ -100,7 +100,6 @@ public class FeeScheduleCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateFeeScheduleCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createFeeSchedule( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class FeeScheduleCommandRestController extends BaseSpringRestController {
 		DeleteFeeScheduleCommand command = new DeleteFeeScheduleCommand( feeScheduleId );
 
     	try {
-        	FeeScheduleService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted FeeSchedule with key " + command.getFeeScheduleId() );
         }
         catch( Throwable exc ) {

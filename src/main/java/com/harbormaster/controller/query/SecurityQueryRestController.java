@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/SecurityQuery")
 public class SecurityQueryRestController extends BaseSpringRestController {
 	
+	public SecurityQueryRestController( SecurityService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Security using a UUID
      * @param		UUID securityId
@@ -95,7 +99,7 @@ public class SecurityQueryRestController extends BaseSpringRestController {
     	Security entity = null;
 
     	try {  
-    		entity = SecurityService.getSecurityInstance().getSecurity( new SecurityFetchOneSummary( securityId ) );
+    		entity = service.getSecurity( new SecurityFetchOneSummary( securityId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Security using Id " + securityId );
@@ -115,7 +119,7 @@ public class SecurityQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Security
-            securityList = SecurityService.getSecurityInstance().getAllSecurity();
+            securityList = service.getAllSecurity();
             
             if ( securityList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Securitys" );
@@ -135,6 +139,7 @@ public class SecurityQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Security security = null;
+    protected SecurityService service = null;
     private static final Logger LOGGER = Logger.getLogger(SecurityQueryRestController.class.getName());
     
 }

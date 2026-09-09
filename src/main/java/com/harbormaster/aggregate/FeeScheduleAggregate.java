@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateFeeScheduleEvent</li>
  *      <li>DeleteFeeScheduleEvent</li>
    *       <li>AssignPricingPlanToFeeScheduleEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignPricingPlanFromFeeScheduleEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

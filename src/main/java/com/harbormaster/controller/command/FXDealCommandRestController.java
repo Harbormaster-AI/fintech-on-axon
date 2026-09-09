@@ -100,7 +100,6 @@ public class FXDealCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateFXDealCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createFXDeal( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class FXDealCommandRestController extends BaseSpringRestController {
 		DeleteFXDealCommand command = new DeleteFXDealCommand( fXDealId );
 
     	try {
-        	FXDealService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted FXDeal with key " + command.getFXDealId() );
         }
         catch( Throwable exc ) {

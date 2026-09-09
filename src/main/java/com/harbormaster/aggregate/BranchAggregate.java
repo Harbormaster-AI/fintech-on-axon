@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateBranchEvent</li>
  *      <li>DeleteBranchEvent</li>
    *       <li>AssignInstitutionToBranchEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignInstitutionFromBranchEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

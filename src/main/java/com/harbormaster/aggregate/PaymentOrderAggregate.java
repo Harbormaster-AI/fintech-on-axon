@@ -85,13 +85,13 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdatePaymentOrderEvent</li>
  *      <li>DeletePaymentOrderEvent</li>
    *       <li>AssignSourceAccountToPaymentOrderEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignSourceAccountFromPaymentOrderEvent</li>
   *       <li>AssignDestinationAccountToPaymentOrderEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignDestinationAccountFromPaymentOrderEvent</li>
   *       <li>AssignBeneficiaryToPaymentOrderEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignBeneficiaryFromPaymentOrderEvent</li>
   *       <li>AssignFxDealToPaymentOrderEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignFxDealFromPaymentOrderEvent</li>
    *       <li>AssignTransactionsToPaymentOrderEvent</li>
  *       <li>RemoveTransactionsFromPaymentOrderEvent</li>
   *       <li>AssignFeesToPaymentOrderEvent</li>
@@ -375,7 +375,7 @@ public class PaymentOrderAggregate {
     private UUID paymentOrderId;
     
     private String orderReference;
-    private Date requestedExecutionDate;
+    private  Date requestedExecutionDate;
     private String purpose;
     private PaymentMethod paymentMethod;
     private PaymentOrderStatus status;

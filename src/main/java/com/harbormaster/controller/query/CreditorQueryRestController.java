@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/CreditorQuery")
 public class CreditorQueryRestController extends BaseSpringRestController {
 	
+	public CreditorQueryRestController( CreditorService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Creditor using a UUID
      * @param		UUID creditorId
@@ -95,7 +99,7 @@ public class CreditorQueryRestController extends BaseSpringRestController {
     	Creditor entity = null;
 
     	try {  
-    		entity = CreditorService.getCreditorInstance().getCreditor( new CreditorFetchOneSummary( creditorId ) );
+    		entity = service.getCreditor( new CreditorFetchOneSummary( creditorId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Creditor using Id " + creditorId );
@@ -115,7 +119,7 @@ public class CreditorQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Creditor
-            creditorList = CreditorService.getCreditorInstance().getAllCreditor();
+            creditorList = service.getAllCreditor();
             
             if ( creditorList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Creditors" );
@@ -135,6 +139,7 @@ public class CreditorQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Creditor creditor = null;
+    protected CreditorService service = null;
     private static final Logger LOGGER = Logger.getLogger(CreditorQueryRestController.class.getName());
     
 }

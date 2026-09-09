@@ -100,7 +100,6 @@ public class SecurityCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateSecurityCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createSecurity( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class SecurityCommandRestController extends BaseSpringRestController {
 		DeleteSecurityCommand command = new DeleteSecurityCommand( securityId );
 
     	try {
-        	SecurityService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Security with key " + command.getSecurityId() );
         }
         catch( Throwable exc ) {

@@ -100,7 +100,6 @@ public class InvestmentAccountCommandRestController extends BaseSpringRestContro
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateInvestmentAccountCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createInvestmentAccount( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class InvestmentAccountCommandRestController extends BaseSpringRestContro
 		DeleteInvestmentAccountCommand command = new DeleteInvestmentAccountCommand( investmentAccountId );
 
     	try {
-        	InvestmentAccountService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted InvestmentAccount with key " + command.getInvestmentAccountId() );
         }
         catch( Throwable exc ) {

@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/APIClient")
 public class APIClientRestController extends BaseSpringRestController {
 
+	public APIClientRestController( APIClientService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a APIClient.  if not key provided, calls create, otherwise calls save
      * @param		APIClient	aPIClient
@@ -94,7 +98,7 @@ public class APIClientRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = APIClientService.getAPIClientInstance().createAPIClient( command );
+			completableFuture = service.createAPIClient( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class APIClientRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateAPIClientCommand
 			// -----------------------------------------------
-			completableFuture = APIClientService.getAPIClientInstance().updateAPIClient(command);;
+			completableFuture = service.updateAPIClient(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "APIClientController:update() - successfully update APIClient - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class APIClientRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteAPIClientCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	APIClientService delegate = APIClientService.getAPIClientInstance();
+        	APIClientService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted APIClient with key " + command.getAPIClientId() );
@@ -155,7 +159,7 @@ public class APIClientRestController extends BaseSpringRestController {
     	APIClient entity = null;
 
     	try {  
-    		entity = APIClientService.getAPIClientInstance().getAPIClient( new APIClientFetchOneSummary( uuid ) );   
+    		entity = service.getAPIClient( new APIClientFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load APIClient using Id " + uuid );
@@ -175,7 +179,7 @@ public class APIClientRestController extends BaseSpringRestController {
         
     	try {
             // load the APIClient
-            aPIClientList = APIClientService.getAPIClientInstance().getAllAPIClient();
+            aPIClientList = service.getAllAPIClient();
             
             if ( aPIClientList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all APIClients" );
@@ -197,7 +201,7 @@ public class APIClientRestController extends BaseSpringRestController {
 	@PutMapping("/addToConsents")
 	public void addToConsents( @RequestBody(required=true) AssignConsentsToAPIClientCommand command ) {
 		try {
-			APIClientService.getAPIClientInstance().addToConsents( command );   
+			service.addToConsents( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Consents", exc );
@@ -212,7 +216,7 @@ public class APIClientRestController extends BaseSpringRestController {
 	public void removeFromConsents( 	@RequestBody(required=true) RemoveConsentsFromAPIClientCommand command )
 	{		
 		try {
-			APIClientService.getAPIClientInstance().removeFromConsents( command );
+			service.removeFromConsents( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Consents", exc );
@@ -226,6 +230,7 @@ public class APIClientRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected APIClient aPIClient = null;
-    private static final Logger LOGGER = Logger.getLogger(APIClientRestController.class.getName());
+	protected APIClientService service = null;
+	private static final Logger LOGGER = Logger.getLogger(APIClientRestController.class.getName());
     
 }

@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/InvestmentPortfolio")
 public class InvestmentPortfolioRestController extends BaseSpringRestController {
 
+	public InvestmentPortfolioRestController( InvestmentPortfolioService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a InvestmentPortfolio.  if not key provided, calls create, otherwise calls save
      * @param		InvestmentPortfolio	investmentPortfolio
@@ -94,7 +98,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = InvestmentPortfolioService.getInvestmentPortfolioInstance().createInvestmentPortfolio( command );
+			completableFuture = service.createInvestmentPortfolio( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
 			// -----------------------------------------------
 			// delegate the UpdateInvestmentPortfolioCommand
 			// -----------------------------------------------
-			completableFuture = InvestmentPortfolioService.getInvestmentPortfolioInstance().updateInvestmentPortfolio(command);;
+			completableFuture = service.updateInvestmentPortfolio(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "InvestmentPortfolioController:update() - successfully update InvestmentPortfolio - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteInvestmentPortfolioCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	InvestmentPortfolioService delegate = InvestmentPortfolioService.getInvestmentPortfolioInstance();
+        	InvestmentPortfolioService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted InvestmentPortfolio with key " + command.getInvestmentPortfolioId() );
@@ -155,7 +159,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
     	InvestmentPortfolio entity = null;
 
     	try {  
-    		entity = InvestmentPortfolioService.getInvestmentPortfolioInstance().getInvestmentPortfolio( new InvestmentPortfolioFetchOneSummary( uuid ) );   
+    		entity = service.getInvestmentPortfolio( new InvestmentPortfolioFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load InvestmentPortfolio using Id " + uuid );
@@ -175,7 +179,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
         
     	try {
             // load the InvestmentPortfolio
-            investmentPortfolioList = InvestmentPortfolioService.getInvestmentPortfolioInstance().getAllInvestmentPortfolio();
+            investmentPortfolioList = service.getAllInvestmentPortfolio();
             
             if ( investmentPortfolioList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all InvestmentPortfolios" );
@@ -196,7 +200,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
 	@PutMapping("/assignCustomer")
 	public void assignCustomer( @RequestBody AssignCustomerToInvestmentPortfolioCommand command ) {
 		try {
-			InvestmentPortfolioService.getInvestmentPortfolioInstance().assignCustomer( command );   
+			service.assignCustomer( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Customer", exc );
@@ -210,7 +214,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
 	@PutMapping("/unAssignCustomer")
 	public void unAssignCustomer( @RequestBody(required=true)  UnAssignCustomerFromInvestmentPortfolioCommand command ) {
 		try {
-			InvestmentPortfolioService.getInvestmentPortfolioInstance().unAssignCustomer( command );   
+			service.unAssignCustomer( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Customer", exc );
@@ -225,7 +229,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
 	@PutMapping("/addToAccounts")
 	public void addToAccounts( @RequestBody(required=true) AssignAccountsToInvestmentPortfolioCommand command ) {
 		try {
-			InvestmentPortfolioService.getInvestmentPortfolioInstance().addToAccounts( command );   
+			service.addToAccounts( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Accounts", exc );
@@ -240,7 +244,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
 	public void removeFromAccounts( 	@RequestBody(required=true) RemoveAccountsFromInvestmentPortfolioCommand command )
 	{		
 		try {
-			InvestmentPortfolioService.getInvestmentPortfolioInstance().removeFromAccounts( command );
+			service.removeFromAccounts( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Accounts", exc );
@@ -254,7 +258,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
 	@PutMapping("/addToOrders")
 	public void addToOrders( @RequestBody(required=true) AssignOrdersToInvestmentPortfolioCommand command ) {
 		try {
-			InvestmentPortfolioService.getInvestmentPortfolioInstance().addToOrders( command );   
+			service.addToOrders( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Orders", exc );
@@ -269,7 +273,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
 	public void removeFromOrders( 	@RequestBody(required=true) RemoveOrdersFromInvestmentPortfolioCommand command )
 	{		
 		try {
-			InvestmentPortfolioService.getInvestmentPortfolioInstance().removeFromOrders( command );
+			service.removeFromOrders( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Orders", exc );
@@ -283,7 +287,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
 	@PutMapping("/addToHoldings")
 	public void addToHoldings( @RequestBody(required=true) AssignHoldingsToInvestmentPortfolioCommand command ) {
 		try {
-			InvestmentPortfolioService.getInvestmentPortfolioInstance().addToHoldings( command );   
+			service.addToHoldings( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Holdings", exc );
@@ -298,7 +302,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
 	public void removeFromHoldings( 	@RequestBody(required=true) RemoveHoldingsFromInvestmentPortfolioCommand command )
 	{		
 		try {
-			InvestmentPortfolioService.getInvestmentPortfolioInstance().removeFromHoldings( command );
+			service.removeFromHoldings( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Holdings", exc );
@@ -312,6 +316,7 @@ public class InvestmentPortfolioRestController extends BaseSpringRestController 
 // Attributes
 //************************************************************************
     protected InvestmentPortfolio investmentPortfolio = null;
-    private static final Logger LOGGER = Logger.getLogger(InvestmentPortfolioRestController.class.getName());
+	protected InvestmentPortfolioService service = null;
+	private static final Logger LOGGER = Logger.getLogger(InvestmentPortfolioRestController.class.getName());
     
 }

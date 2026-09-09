@@ -67,9 +67,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateChargebackEvent</li>
  *      <li>DeleteChargebackEvent</li>
    *       <li>AssignDisputeToChargebackEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignDisputeFromChargebackEvent</li>
   *       <li>AssignTransactionToChargebackEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignTransactionFromChargebackEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateCompliancePolicyEvent</li>
  *      <li>DeleteCompliancePolicyEvent</li>
    *       <li>AssignInstitutionToCompliancePolicyEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignInstitutionFromCompliancePolicyEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

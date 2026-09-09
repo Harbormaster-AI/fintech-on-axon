@@ -74,9 +74,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateTradeOrderEvent</li>
  *      <li>DeleteTradeOrderEvent</li>
    *       <li>AssignPortfolioToTradeOrderEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignPortfolioFromTradeOrderEvent</li>
   *       <li>AssignSecurityToTradeOrderEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignSecurityFromTradeOrderEvent</li>
    *       <li>AssignTradesToTradeOrderEvent</li>
  *       <li>RemoveTradesFromTradeOrderEvent</li>
   *        </ul>

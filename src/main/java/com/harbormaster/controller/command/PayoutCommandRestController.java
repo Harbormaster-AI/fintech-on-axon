@@ -100,7 +100,6 @@ public class PayoutCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreatePayoutCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createPayout( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class PayoutCommandRestController extends BaseSpringRestController {
 		DeletePayoutCommand command = new DeletePayoutCommand( payoutId );
 
     	try {
-        	PayoutService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Payout with key " + command.getPayoutId() );
         }
         catch( Throwable exc ) {

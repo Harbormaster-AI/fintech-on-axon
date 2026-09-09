@@ -86,7 +86,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateLoanEvent</li>
  *      <li>DeleteLoanEvent</li>
    *       <li>AssignCustomerToLoanEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCustomerFromLoanEvent</li>
    *       <li>AssignScheduleToLoanEvent</li>
  *       <li>RemoveScheduleFromLoanEvent</li>
   *       <li>AssignCollateralToLoanEvent</li>
@@ -313,8 +313,8 @@ public class LoanAggregate {
     private String loanNumber;
     private Money principal;
     private java.math.BigDecimal interestRate;
-    private Date originationDate;
-    private Date maturityDate;
+    private  Date originationDate;
+    private  Date maturityDate;
     private InterestRateType rateType;
     private LoanStatus status;
     private Customer customer = null;

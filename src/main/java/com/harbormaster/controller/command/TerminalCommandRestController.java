@@ -100,7 +100,6 @@ public class TerminalCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateTerminalCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createTerminal( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class TerminalCommandRestController extends BaseSpringRestController {
 		DeleteTerminalCommand command = new DeleteTerminalCommand( terminalId );
 
     	try {
-        	TerminalService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Terminal with key " + command.getTerminalId() );
         }
         catch( Throwable exc ) {

@@ -87,15 +87,15 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateTransactionEvent</li>
  *      <li>DeleteTransactionEvent</li>
    *       <li>AssignAccountToTransactionEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignAccountFromTransactionEvent</li>
   *       <li>AssignWalletToTransactionEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignWalletFromTransactionEvent</li>
   *       <li>AssignPaymentOrderToTransactionEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignPaymentOrderFromTransactionEvent</li>
   *       <li>AssignMerchantToTransactionEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignMerchantFromTransactionEvent</li>
   *       <li>AssignCardToTransactionEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCardFromTransactionEvent</li>
    *       <li>AssignRelatedTransactionsToTransactionEvent</li>
  *       <li>RemoveRelatedTransactionsFromTransactionEvent</li>
   *       <li>AssignAlertsToTransactionEvent</li>

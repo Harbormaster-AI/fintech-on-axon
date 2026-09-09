@@ -67,9 +67,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdatePositionEvent</li>
  *      <li>DeletePositionEvent</li>
    *       <li>AssignPortfolioToPositionEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignPortfolioFromPositionEvent</li>
   *       <li>AssignSecurityToPositionEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignSecurityFromPositionEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

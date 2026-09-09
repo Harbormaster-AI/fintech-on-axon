@@ -72,7 +72,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateRepaymentScheduleEvent</li>
  *      <li>DeleteRepaymentScheduleEvent</li>
    *       <li>AssignLoanToRepaymentScheduleEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignLoanFromRepaymentScheduleEvent</li>
    *       <li>AssignPaymentsToRepaymentScheduleEvent</li>
  *       <li>RemovePaymentsFromRepaymentScheduleEvent</li>
   *        </ul>
@@ -224,8 +224,8 @@ public class RepaymentScheduleAggregate {
     @AggregateIdentifier
     private UUID repaymentScheduleId;
     
-    private Integer installmentNumber;
-    private Date dueDate;
+    private int installmentNumber;
+    private  Date dueDate;
     private Money amountDue;
     private Money principalDue;
     private Money interestDue;

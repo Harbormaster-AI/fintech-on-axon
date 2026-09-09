@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateLoanTransactionEvent</li>
  *      <li>DeleteLoanTransactionEvent</li>
    *       <li>AssignLoanToLoanTransactionEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignLoanFromLoanTransactionEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>
@@ -182,7 +182,7 @@ public class LoanTransactionAggregate {
     
     private TransactionId transactionId;
     private Money amount;
-    private Date postingDate;
+    private  Date postingDate;
     private LoanTransactionType type;
     private PostingStatus status;
     private Loan loan = null;

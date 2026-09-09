@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/InvoiceQuery")
 public class InvoiceQueryRestController extends BaseSpringRestController {
 	
+	public InvoiceQueryRestController( InvoiceService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Invoice using a UUID
      * @param		UUID invoiceId
@@ -95,7 +99,7 @@ public class InvoiceQueryRestController extends BaseSpringRestController {
     	Invoice entity = null;
 
     	try {  
-    		entity = InvoiceService.getInvoiceInstance().getInvoice( new InvoiceFetchOneSummary( invoiceId ) );
+    		entity = service.getInvoice( new InvoiceFetchOneSummary( invoiceId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Invoice using Id " + invoiceId );
@@ -115,7 +119,7 @@ public class InvoiceQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Invoice
-            invoiceList = InvoiceService.getInvoiceInstance().getAllInvoice();
+            invoiceList = service.getAllInvoice();
             
             if ( invoiceList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Invoices" );
@@ -135,6 +139,7 @@ public class InvoiceQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Invoice invoice = null;
+    protected InvoiceService service = null;
     private static final Logger LOGGER = Logger.getLogger(InvoiceQueryRestController.class.getName());
     
 }

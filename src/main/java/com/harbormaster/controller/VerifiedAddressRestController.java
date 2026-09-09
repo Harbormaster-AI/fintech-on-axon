@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/VerifiedAddress")
 public class VerifiedAddressRestController extends BaseSpringRestController {
 
+	public VerifiedAddressRestController( VerifiedAddressService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a VerifiedAddress.  if not key provided, calls create, otherwise calls save
      * @param		VerifiedAddress	verifiedAddress
@@ -94,7 +98,7 @@ public class VerifiedAddressRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = VerifiedAddressService.getVerifiedAddressInstance().createVerifiedAddress( command );
+			completableFuture = service.createVerifiedAddress( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class VerifiedAddressRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateVerifiedAddressCommand
 			// -----------------------------------------------
-			completableFuture = VerifiedAddressService.getVerifiedAddressInstance().updateVerifiedAddress(command);;
+			completableFuture = service.updateVerifiedAddress(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "VerifiedAddressController:update() - successfully update VerifiedAddress - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class VerifiedAddressRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteVerifiedAddressCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	VerifiedAddressService delegate = VerifiedAddressService.getVerifiedAddressInstance();
+        	VerifiedAddressService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted VerifiedAddress with key " + command.getVerifiedAddressId() );
@@ -155,7 +159,7 @@ public class VerifiedAddressRestController extends BaseSpringRestController {
     	VerifiedAddress entity = null;
 
     	try {  
-    		entity = VerifiedAddressService.getVerifiedAddressInstance().getVerifiedAddress( new VerifiedAddressFetchOneSummary( uuid ) );   
+    		entity = service.getVerifiedAddress( new VerifiedAddressFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load VerifiedAddress using Id " + uuid );
@@ -175,7 +179,7 @@ public class VerifiedAddressRestController extends BaseSpringRestController {
         
     	try {
             // load the VerifiedAddress
-            verifiedAddressList = VerifiedAddressService.getVerifiedAddressInstance().getAllVerifiedAddress();
+            verifiedAddressList = service.getAllVerifiedAddress();
             
             if ( verifiedAddressList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all VerifiedAddresss" );
@@ -196,7 +200,7 @@ public class VerifiedAddressRestController extends BaseSpringRestController {
 	@PutMapping("/assignKycProfile")
 	public void assignKycProfile( @RequestBody AssignKycProfileToVerifiedAddressCommand command ) {
 		try {
-			VerifiedAddressService.getVerifiedAddressInstance().assignKycProfile( command );   
+			service.assignKycProfile( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign KycProfile", exc );
@@ -210,7 +214,7 @@ public class VerifiedAddressRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignKycProfile")
 	public void unAssignKycProfile( @RequestBody(required=true)  UnAssignKycProfileFromVerifiedAddressCommand command ) {
 		try {
-			VerifiedAddressService.getVerifiedAddressInstance().unAssignKycProfile( command );   
+			service.unAssignKycProfile( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign KycProfile", exc );
@@ -225,6 +229,7 @@ public class VerifiedAddressRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected VerifiedAddress verifiedAddress = null;
-    private static final Logger LOGGER = Logger.getLogger(VerifiedAddressRestController.class.getName());
+	protected VerifiedAddressService service = null;
+	private static final Logger LOGGER = Logger.getLogger(VerifiedAddressRestController.class.getName());
     
 }

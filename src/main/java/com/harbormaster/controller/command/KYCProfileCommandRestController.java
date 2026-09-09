@@ -100,7 +100,6 @@ public class KYCProfileCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateKYCProfileCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createKYCProfile( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class KYCProfileCommandRestController extends BaseSpringRestController {
 		DeleteKYCProfileCommand command = new DeleteKYCProfileCommand( kYCProfileId );
 
     	try {
-        	KYCProfileService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted KYCProfile with key " + command.getKYCProfileId() );
         }
         catch( Throwable exc ) {

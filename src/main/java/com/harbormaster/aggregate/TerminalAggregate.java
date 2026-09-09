@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateTerminalEvent</li>
  *      <li>DeleteTerminalEvent</li>
    *       <li>AssignMerchantToTerminalEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignMerchantFromTerminalEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

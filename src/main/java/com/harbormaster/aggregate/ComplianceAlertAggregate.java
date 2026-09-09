@@ -67,9 +67,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateComplianceAlertEvent</li>
  *      <li>DeleteComplianceAlertEvent</li>
    *       <li>AssignScreeningToComplianceAlertEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignScreeningFromComplianceAlertEvent</li>
   *       <li>AssignTransactionToComplianceAlertEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignTransactionFromComplianceAlertEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

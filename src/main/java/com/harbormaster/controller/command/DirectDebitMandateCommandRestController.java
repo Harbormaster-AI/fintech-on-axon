@@ -100,7 +100,6 @@ public class DirectDebitMandateCommandRestController extends BaseSpringRestContr
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateDirectDebitMandateCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createDirectDebitMandate( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class DirectDebitMandateCommandRestController extends BaseSpringRestContr
 		DeleteDirectDebitMandateCommand command = new DeleteDirectDebitMandateCommand( directDebitMandateId );
 
     	try {
-        	DirectDebitMandateService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted DirectDebitMandate with key " + command.getDirectDebitMandateId() );
         }
         catch( Throwable exc ) {

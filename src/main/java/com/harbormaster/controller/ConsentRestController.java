@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Consent")
 public class ConsentRestController extends BaseSpringRestController {
 
+	public ConsentRestController( ConsentService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Consent.  if not key provided, calls create, otherwise calls save
      * @param		Consent	consent
@@ -94,7 +98,7 @@ public class ConsentRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = ConsentService.getConsentInstance().createConsent( command );
+			completableFuture = service.createConsent( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class ConsentRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateConsentCommand
 			// -----------------------------------------------
-			completableFuture = ConsentService.getConsentInstance().updateConsent(command);;
+			completableFuture = service.updateConsent(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "ConsentController:update() - successfully update Consent - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class ConsentRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteConsentCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	ConsentService delegate = ConsentService.getConsentInstance();
+        	ConsentService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Consent with key " + command.getConsentId() );
@@ -155,7 +159,7 @@ public class ConsentRestController extends BaseSpringRestController {
     	Consent entity = null;
 
     	try {  
-    		entity = ConsentService.getConsentInstance().getConsent( new ConsentFetchOneSummary( uuid ) );   
+    		entity = service.getConsent( new ConsentFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Consent using Id " + uuid );
@@ -175,7 +179,7 @@ public class ConsentRestController extends BaseSpringRestController {
         
     	try {
             // load the Consent
-            consentList = ConsentService.getConsentInstance().getAllConsent();
+            consentList = service.getAllConsent();
             
             if ( consentList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Consents" );
@@ -196,7 +200,7 @@ public class ConsentRestController extends BaseSpringRestController {
 	@PutMapping("/assignCustomer")
 	public void assignCustomer( @RequestBody AssignCustomerToConsentCommand command ) {
 		try {
-			ConsentService.getConsentInstance().assignCustomer( command );   
+			service.assignCustomer( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Customer", exc );
@@ -210,7 +214,7 @@ public class ConsentRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignCustomer")
 	public void unAssignCustomer( @RequestBody(required=true)  UnAssignCustomerFromConsentCommand command ) {
 		try {
-			ConsentService.getConsentInstance().unAssignCustomer( command );   
+			service.unAssignCustomer( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Customer", exc );
@@ -224,7 +228,7 @@ public class ConsentRestController extends BaseSpringRestController {
 	@PutMapping("/assignApiClient")
 	public void assignApiClient( @RequestBody AssignApiClientToConsentCommand command ) {
 		try {
-			ConsentService.getConsentInstance().assignApiClient( command );   
+			service.assignApiClient( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign ApiClient", exc );
@@ -238,7 +242,7 @@ public class ConsentRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignApiClient")
 	public void unAssignApiClient( @RequestBody(required=true)  UnAssignApiClientFromConsentCommand command ) {
 		try {
-			ConsentService.getConsentInstance().unAssignApiClient( command );   
+			service.unAssignApiClient( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign ApiClient", exc );
@@ -253,6 +257,7 @@ public class ConsentRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Consent consent = null;
-    private static final Logger LOGGER = Logger.getLogger(ConsentRestController.class.getName());
+	protected ConsentService service = null;
+	private static final Logger LOGGER = Logger.getLogger(ConsentRestController.class.getName());
     
 }

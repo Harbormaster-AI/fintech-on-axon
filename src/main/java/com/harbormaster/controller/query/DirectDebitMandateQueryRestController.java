@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/DirectDebitMandateQuery")
 public class DirectDebitMandateQueryRestController extends BaseSpringRestController {
 	
+	public DirectDebitMandateQueryRestController( DirectDebitMandateService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a DirectDebitMandate using a UUID
      * @param		UUID directDebitMandateId
@@ -95,7 +99,7 @@ public class DirectDebitMandateQueryRestController extends BaseSpringRestControl
     	DirectDebitMandate entity = null;
 
     	try {  
-    		entity = DirectDebitMandateService.getDirectDebitMandateInstance().getDirectDebitMandate( new DirectDebitMandateFetchOneSummary( directDebitMandateId ) );
+    		entity = service.getDirectDebitMandate( new DirectDebitMandateFetchOneSummary( directDebitMandateId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load DirectDebitMandate using Id " + directDebitMandateId );
@@ -115,7 +119,7 @@ public class DirectDebitMandateQueryRestController extends BaseSpringRestControl
         
     	try {
             // load the DirectDebitMandate
-            directDebitMandateList = DirectDebitMandateService.getDirectDebitMandateInstance().getAllDirectDebitMandate();
+            directDebitMandateList = service.getAllDirectDebitMandate();
             
             if ( directDebitMandateList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all DirectDebitMandates" );
@@ -135,6 +139,7 @@ public class DirectDebitMandateQueryRestController extends BaseSpringRestControl
 // Attributes
 //************************************************************************
     protected DirectDebitMandate directDebitMandate = null;
+    protected DirectDebitMandateService service = null;
     private static final Logger LOGGER = Logger.getLogger(DirectDebitMandateQueryRestController.class.getName());
     
 }

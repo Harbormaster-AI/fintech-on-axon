@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/CompliancePolicy")
 public class CompliancePolicyRestController extends BaseSpringRestController {
 
+	public CompliancePolicyRestController( CompliancePolicyService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a CompliancePolicy.  if not key provided, calls create, otherwise calls save
      * @param		CompliancePolicy	compliancePolicy
@@ -94,7 +98,7 @@ public class CompliancePolicyRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = CompliancePolicyService.getCompliancePolicyInstance().createCompliancePolicy( command );
+			completableFuture = service.createCompliancePolicy( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class CompliancePolicyRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateCompliancePolicyCommand
 			// -----------------------------------------------
-			completableFuture = CompliancePolicyService.getCompliancePolicyInstance().updateCompliancePolicy(command);;
+			completableFuture = service.updateCompliancePolicy(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "CompliancePolicyController:update() - successfully update CompliancePolicy - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class CompliancePolicyRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteCompliancePolicyCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	CompliancePolicyService delegate = CompliancePolicyService.getCompliancePolicyInstance();
+        	CompliancePolicyService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted CompliancePolicy with key " + command.getCompliancePolicyId() );
@@ -155,7 +159,7 @@ public class CompliancePolicyRestController extends BaseSpringRestController {
     	CompliancePolicy entity = null;
 
     	try {  
-    		entity = CompliancePolicyService.getCompliancePolicyInstance().getCompliancePolicy( new CompliancePolicyFetchOneSummary( uuid ) );   
+    		entity = service.getCompliancePolicy( new CompliancePolicyFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load CompliancePolicy using Id " + uuid );
@@ -175,7 +179,7 @@ public class CompliancePolicyRestController extends BaseSpringRestController {
         
     	try {
             // load the CompliancePolicy
-            compliancePolicyList = CompliancePolicyService.getCompliancePolicyInstance().getAllCompliancePolicy();
+            compliancePolicyList = service.getAllCompliancePolicy();
             
             if ( compliancePolicyList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all CompliancePolicys" );
@@ -196,7 +200,7 @@ public class CompliancePolicyRestController extends BaseSpringRestController {
 	@PutMapping("/assignInstitution")
 	public void assignInstitution( @RequestBody AssignInstitutionToCompliancePolicyCommand command ) {
 		try {
-			CompliancePolicyService.getCompliancePolicyInstance().assignInstitution( command );   
+			service.assignInstitution( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Institution", exc );
@@ -210,7 +214,7 @@ public class CompliancePolicyRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignInstitution")
 	public void unAssignInstitution( @RequestBody(required=true)  UnAssignInstitutionFromCompliancePolicyCommand command ) {
 		try {
-			CompliancePolicyService.getCompliancePolicyInstance().unAssignInstitution( command );   
+			service.unAssignInstitution( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Institution", exc );
@@ -225,6 +229,7 @@ public class CompliancePolicyRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected CompliancePolicy compliancePolicy = null;
-    private static final Logger LOGGER = Logger.getLogger(CompliancePolicyRestController.class.getName());
+	protected CompliancePolicyService service = null;
+	private static final Logger LOGGER = Logger.getLogger(CompliancePolicyRestController.class.getName());
     
 }

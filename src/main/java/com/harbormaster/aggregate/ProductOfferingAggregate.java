@@ -72,7 +72,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateProductOfferingEvent</li>
  *      <li>DeleteProductOfferingEvent</li>
    *       <li>AssignInstitutionToProductOfferingEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignInstitutionFromProductOfferingEvent</li>
    *       <li>AssignPricingPlansToProductOfferingEvent</li>
  *       <li>RemovePricingPlansFromProductOfferingEvent</li>
   *        </ul>

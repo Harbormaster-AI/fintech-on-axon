@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateVerifiedAddressEvent</li>
  *      <li>DeleteVerifiedAddressEvent</li>
    *       <li>AssignKycProfileToVerifiedAddressEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignKycProfileFromVerifiedAddressEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

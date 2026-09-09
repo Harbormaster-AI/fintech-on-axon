@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/SettlementBatchQuery")
 public class SettlementBatchQueryRestController extends BaseSpringRestController {
 	
+	public SettlementBatchQueryRestController( SettlementBatchService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a SettlementBatch using a UUID
      * @param		UUID settlementBatchId
@@ -95,7 +99,7 @@ public class SettlementBatchQueryRestController extends BaseSpringRestController
     	SettlementBatch entity = null;
 
     	try {  
-    		entity = SettlementBatchService.getSettlementBatchInstance().getSettlementBatch( new SettlementBatchFetchOneSummary( settlementBatchId ) );
+    		entity = service.getSettlementBatch( new SettlementBatchFetchOneSummary( settlementBatchId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load SettlementBatch using Id " + settlementBatchId );
@@ -115,7 +119,7 @@ public class SettlementBatchQueryRestController extends BaseSpringRestController
         
     	try {
             // load the SettlementBatch
-            settlementBatchList = SettlementBatchService.getSettlementBatchInstance().getAllSettlementBatch();
+            settlementBatchList = service.getAllSettlementBatch();
             
             if ( settlementBatchList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all SettlementBatchs" );
@@ -135,6 +139,7 @@ public class SettlementBatchQueryRestController extends BaseSpringRestController
 // Attributes
 //************************************************************************
     protected SettlementBatch settlementBatch = null;
+    protected SettlementBatchService service = null;
     private static final Logger LOGGER = Logger.getLogger(SettlementBatchQueryRestController.class.getName());
     
 }

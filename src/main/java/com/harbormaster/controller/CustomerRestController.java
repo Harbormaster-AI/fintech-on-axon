@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Customer")
 public class CustomerRestController extends BaseSpringRestController {
 
+	public CustomerRestController( CustomerService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Customer.  if not key provided, calls create, otherwise calls save
      * @param		Customer	customer
@@ -94,7 +98,7 @@ public class CustomerRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = CustomerService.getCustomerInstance().createCustomer( command );
+			completableFuture = service.createCustomer( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class CustomerRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateCustomerCommand
 			// -----------------------------------------------
-			completableFuture = CustomerService.getCustomerInstance().updateCustomer(command);;
+			completableFuture = service.updateCustomer(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "CustomerController:update() - successfully update Customer - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class CustomerRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteCustomerCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	CustomerService delegate = CustomerService.getCustomerInstance();
+        	CustomerService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Customer with key " + command.getCustomerId() );
@@ -155,7 +159,7 @@ public class CustomerRestController extends BaseSpringRestController {
     	Customer entity = null;
 
     	try {  
-    		entity = CustomerService.getCustomerInstance().getCustomer( new CustomerFetchOneSummary( uuid ) );   
+    		entity = service.getCustomer( new CustomerFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Customer using Id " + uuid );
@@ -175,7 +179,7 @@ public class CustomerRestController extends BaseSpringRestController {
         
     	try {
             // load the Customer
-            customerList = CustomerService.getCustomerInstance().getAllCustomer();
+            customerList = service.getAllCustomer();
             
             if ( customerList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Customers" );
@@ -196,7 +200,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/assignInstitution")
 	public void assignInstitution( @RequestBody AssignInstitutionToCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().assignInstitution( command );   
+			service.assignInstitution( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Institution", exc );
@@ -210,7 +214,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignInstitution")
 	public void unAssignInstitution( @RequestBody(required=true)  UnAssignInstitutionFromCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().unAssignInstitution( command );   
+			service.unAssignInstitution( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Institution", exc );
@@ -225,7 +229,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/addToAccounts")
 	public void addToAccounts( @RequestBody(required=true) AssignAccountsToCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().addToAccounts( command );   
+			service.addToAccounts( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Accounts", exc );
@@ -240,7 +244,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	public void removeFromAccounts( 	@RequestBody(required=true) RemoveAccountsFromCustomerCommand command )
 	{		
 		try {
-			CustomerService.getCustomerInstance().removeFromAccounts( command );
+			service.removeFromAccounts( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Accounts", exc );
@@ -254,7 +258,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/addToWallets")
 	public void addToWallets( @RequestBody(required=true) AssignWalletsToCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().addToWallets( command );   
+			service.addToWallets( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Wallets", exc );
@@ -269,7 +273,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	public void removeFromWallets( 	@RequestBody(required=true) RemoveWalletsFromCustomerCommand command )
 	{		
 		try {
-			CustomerService.getCustomerInstance().removeFromWallets( command );
+			service.removeFromWallets( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Wallets", exc );
@@ -283,7 +287,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/addToCards")
 	public void addToCards( @RequestBody(required=true) AssignCardsToCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().addToCards( command );   
+			service.addToCards( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Cards", exc );
@@ -298,7 +302,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	public void removeFromCards( 	@RequestBody(required=true) RemoveCardsFromCustomerCommand command )
 	{		
 		try {
-			CustomerService.getCustomerInstance().removeFromCards( command );
+			service.removeFromCards( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Cards", exc );
@@ -312,7 +316,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/addToKycProfiles")
 	public void addToKycProfiles( @RequestBody(required=true) AssignKycProfilesToCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().addToKycProfiles( command );   
+			service.addToKycProfiles( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set KycProfiles", exc );
@@ -327,7 +331,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	public void removeFromKycProfiles( 	@RequestBody(required=true) RemoveKycProfilesFromCustomerCommand command )
 	{		
 		try {
-			CustomerService.getCustomerInstance().removeFromKycProfiles( command );
+			service.removeFromKycProfiles( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set KycProfiles", exc );
@@ -341,7 +345,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/addToConsents")
 	public void addToConsents( @RequestBody(required=true) AssignConsentsToCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().addToConsents( command );   
+			service.addToConsents( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Consents", exc );
@@ -356,7 +360,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	public void removeFromConsents( 	@RequestBody(required=true) RemoveConsentsFromCustomerCommand command )
 	{		
 		try {
-			CustomerService.getCustomerInstance().removeFromConsents( command );
+			service.removeFromConsents( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Consents", exc );
@@ -370,7 +374,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/addToAgreements")
 	public void addToAgreements( @RequestBody(required=true) AssignAgreementsToCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().addToAgreements( command );   
+			service.addToAgreements( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Agreements", exc );
@@ -385,7 +389,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	public void removeFromAgreements( 	@RequestBody(required=true) RemoveAgreementsFromCustomerCommand command )
 	{		
 		try {
-			CustomerService.getCustomerInstance().removeFromAgreements( command );
+			service.removeFromAgreements( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Agreements", exc );
@@ -399,7 +403,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/addToLoanApplications")
 	public void addToLoanApplications( @RequestBody(required=true) AssignLoanApplicationsToCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().addToLoanApplications( command );   
+			service.addToLoanApplications( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set LoanApplications", exc );
@@ -414,7 +418,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	public void removeFromLoanApplications( 	@RequestBody(required=true) RemoveLoanApplicationsFromCustomerCommand command )
 	{		
 		try {
-			CustomerService.getCustomerInstance().removeFromLoanApplications( command );
+			service.removeFromLoanApplications( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set LoanApplications", exc );
@@ -428,7 +432,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/addToLoans")
 	public void addToLoans( @RequestBody(required=true) AssignLoansToCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().addToLoans( command );   
+			service.addToLoans( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Loans", exc );
@@ -443,7 +447,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	public void removeFromLoans( 	@RequestBody(required=true) RemoveLoansFromCustomerCommand command )
 	{		
 		try {
-			CustomerService.getCustomerInstance().removeFromLoans( command );
+			service.removeFromLoans( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Loans", exc );
@@ -457,7 +461,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/addToPortfolios")
 	public void addToPortfolios( @RequestBody(required=true) AssignPortfoliosToCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().addToPortfolios( command );   
+			service.addToPortfolios( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Portfolios", exc );
@@ -472,7 +476,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	public void removeFromPortfolios( 	@RequestBody(required=true) RemovePortfoliosFromCustomerCommand command )
 	{		
 		try {
-			CustomerService.getCustomerInstance().removeFromPortfolios( command );
+			service.removeFromPortfolios( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Portfolios", exc );
@@ -486,7 +490,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	@PutMapping("/addToDisputes")
 	public void addToDisputes( @RequestBody(required=true) AssignDisputesToCustomerCommand command ) {
 		try {
-			CustomerService.getCustomerInstance().addToDisputes( command );   
+			service.addToDisputes( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Disputes", exc );
@@ -501,7 +505,7 @@ public class CustomerRestController extends BaseSpringRestController {
 	public void removeFromDisputes( 	@RequestBody(required=true) RemoveDisputesFromCustomerCommand command )
 	{		
 		try {
-			CustomerService.getCustomerInstance().removeFromDisputes( command );
+			service.removeFromDisputes( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Disputes", exc );
@@ -515,6 +519,7 @@ public class CustomerRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Customer customer = null;
-    private static final Logger LOGGER = Logger.getLogger(CustomerRestController.class.getName());
+	protected CustomerService service = null;
+	private static final Logger LOGGER = Logger.getLogger(CustomerRestController.class.getName());
     
 }

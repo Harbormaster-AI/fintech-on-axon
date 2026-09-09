@@ -81,9 +81,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateSettlementBatchEvent</li>
  *      <li>DeleteSettlementBatchEvent</li>
    *       <li>AssignProcessorToSettlementBatchEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignProcessorFromSettlementBatchEvent</li>
   *       <li>AssignMerchantToSettlementBatchEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignMerchantFromSettlementBatchEvent</li>
    *       <li>AssignPayoutsToSettlementBatchEvent</li>
  *       <li>RemovePayoutsFromSettlementBatchEvent</li>
   *       <li>AssignTransactionsToSettlementBatchEvent</li>
@@ -306,7 +306,7 @@ public class SettlementBatchAggregate {
     private DateTime periodStart;
     private DateTime periodEnd;
     private Money totalVolume;
-    private Integer totalCount;
+    private int totalCount;
     private SettlementStatus status;
     private PaymentProcessor processor = null;
     private Merchant merchant = null;

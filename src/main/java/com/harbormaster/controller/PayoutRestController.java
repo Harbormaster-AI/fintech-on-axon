@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Payout")
 public class PayoutRestController extends BaseSpringRestController {
 
+	public PayoutRestController( PayoutService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Payout.  if not key provided, calls create, otherwise calls save
      * @param		Payout	payout
@@ -94,7 +98,7 @@ public class PayoutRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = PayoutService.getPayoutInstance().createPayout( command );
+			completableFuture = service.createPayout( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class PayoutRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdatePayoutCommand
 			// -----------------------------------------------
-			completableFuture = PayoutService.getPayoutInstance().updatePayout(command);;
+			completableFuture = service.updatePayout(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "PayoutController:update() - successfully update Payout - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class PayoutRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeletePayoutCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	PayoutService delegate = PayoutService.getPayoutInstance();
+        	PayoutService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Payout with key " + command.getPayoutId() );
@@ -155,7 +159,7 @@ public class PayoutRestController extends BaseSpringRestController {
     	Payout entity = null;
 
     	try {  
-    		entity = PayoutService.getPayoutInstance().getPayout( new PayoutFetchOneSummary( uuid ) );   
+    		entity = service.getPayout( new PayoutFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Payout using Id " + uuid );
@@ -175,7 +179,7 @@ public class PayoutRestController extends BaseSpringRestController {
         
     	try {
             // load the Payout
-            payoutList = PayoutService.getPayoutInstance().getAllPayout();
+            payoutList = service.getAllPayout();
             
             if ( payoutList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Payouts" );
@@ -196,7 +200,7 @@ public class PayoutRestController extends BaseSpringRestController {
 	@PutMapping("/assignMerchant")
 	public void assignMerchant( @RequestBody AssignMerchantToPayoutCommand command ) {
 		try {
-			PayoutService.getPayoutInstance().assignMerchant( command );   
+			service.assignMerchant( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Merchant", exc );
@@ -210,7 +214,7 @@ public class PayoutRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignMerchant")
 	public void unAssignMerchant( @RequestBody(required=true)  UnAssignMerchantFromPayoutCommand command ) {
 		try {
-			PayoutService.getPayoutInstance().unAssignMerchant( command );   
+			service.unAssignMerchant( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Merchant", exc );
@@ -224,7 +228,7 @@ public class PayoutRestController extends BaseSpringRestController {
 	@PutMapping("/assignSettlementBatch")
 	public void assignSettlementBatch( @RequestBody AssignSettlementBatchToPayoutCommand command ) {
 		try {
-			PayoutService.getPayoutInstance().assignSettlementBatch( command );   
+			service.assignSettlementBatch( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign SettlementBatch", exc );
@@ -238,7 +242,7 @@ public class PayoutRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignSettlementBatch")
 	public void unAssignSettlementBatch( @RequestBody(required=true)  UnAssignSettlementBatchFromPayoutCommand command ) {
 		try {
-			PayoutService.getPayoutInstance().unAssignSettlementBatch( command );   
+			service.unAssignSettlementBatch( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign SettlementBatch", exc );
@@ -252,7 +256,7 @@ public class PayoutRestController extends BaseSpringRestController {
 	@PutMapping("/assignDestinationAccount")
 	public void assignDestinationAccount( @RequestBody AssignDestinationAccountToPayoutCommand command ) {
 		try {
-			PayoutService.getPayoutInstance().assignDestinationAccount( command );   
+			service.assignDestinationAccount( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign DestinationAccount", exc );
@@ -266,7 +270,7 @@ public class PayoutRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignDestinationAccount")
 	public void unAssignDestinationAccount( @RequestBody(required=true)  UnAssignDestinationAccountFromPayoutCommand command ) {
 		try {
-			PayoutService.getPayoutInstance().unAssignDestinationAccount( command );   
+			service.unAssignDestinationAccount( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign DestinationAccount", exc );
@@ -281,6 +285,7 @@ public class PayoutRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Payout payout = null;
-    private static final Logger LOGGER = Logger.getLogger(PayoutRestController.class.getName());
+	protected PayoutService service = null;
+	private static final Logger LOGGER = Logger.getLogger(PayoutRestController.class.getName());
     
 }

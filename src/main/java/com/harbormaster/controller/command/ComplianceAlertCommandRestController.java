@@ -100,7 +100,6 @@ public class ComplianceAlertCommandRestController extends BaseSpringRestControll
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateComplianceAlertCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createComplianceAlert( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class ComplianceAlertCommandRestController extends BaseSpringRestControll
 		DeleteComplianceAlertCommand command = new DeleteComplianceAlertCommand( complianceAlertId );
 
     	try {
-        	ComplianceAlertService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted ComplianceAlert with key " + command.getComplianceAlertId() );
         }
         catch( Throwable exc ) {

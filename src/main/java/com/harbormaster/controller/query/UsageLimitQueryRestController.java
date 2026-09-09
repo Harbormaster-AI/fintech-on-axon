@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/UsageLimitQuery")
 public class UsageLimitQueryRestController extends BaseSpringRestController {
 	
+	public UsageLimitQueryRestController( UsageLimitService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a UsageLimit using a UUID
      * @param		UUID usageLimitId
@@ -95,7 +99,7 @@ public class UsageLimitQueryRestController extends BaseSpringRestController {
     	UsageLimit entity = null;
 
     	try {  
-    		entity = UsageLimitService.getUsageLimitInstance().getUsageLimit( new UsageLimitFetchOneSummary( usageLimitId ) );
+    		entity = service.getUsageLimit( new UsageLimitFetchOneSummary( usageLimitId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load UsageLimit using Id " + usageLimitId );
@@ -115,7 +119,7 @@ public class UsageLimitQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the UsageLimit
-            usageLimitList = UsageLimitService.getUsageLimitInstance().getAllUsageLimit();
+            usageLimitList = service.getAllUsageLimit();
             
             if ( usageLimitList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all UsageLimits" );
@@ -135,6 +139,7 @@ public class UsageLimitQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected UsageLimit usageLimit = null;
+    protected UsageLimitService service = null;
     private static final Logger LOGGER = Logger.getLogger(UsageLimitQueryRestController.class.getName());
     
 }

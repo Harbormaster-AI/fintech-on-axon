@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Security")
 public class SecurityRestController extends BaseSpringRestController {
 
+	public SecurityRestController( SecurityService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Security.  if not key provided, calls create, otherwise calls save
      * @param		Security	security
@@ -94,7 +98,7 @@ public class SecurityRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = SecurityService.getSecurityInstance().createSecurity( command );
+			completableFuture = service.createSecurity( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class SecurityRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateSecurityCommand
 			// -----------------------------------------------
-			completableFuture = SecurityService.getSecurityInstance().updateSecurity(command);;
+			completableFuture = service.updateSecurity(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "SecurityController:update() - successfully update Security - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class SecurityRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteSecurityCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	SecurityService delegate = SecurityService.getSecurityInstance();
+        	SecurityService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Security with key " + command.getSecurityId() );
@@ -155,7 +159,7 @@ public class SecurityRestController extends BaseSpringRestController {
     	Security entity = null;
 
     	try {  
-    		entity = SecurityService.getSecurityInstance().getSecurity( new SecurityFetchOneSummary( uuid ) );   
+    		entity = service.getSecurity( new SecurityFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Security using Id " + uuid );
@@ -175,7 +179,7 @@ public class SecurityRestController extends BaseSpringRestController {
         
     	try {
             // load the Security
-            securityList = SecurityService.getSecurityInstance().getAllSecurity();
+            securityList = service.getAllSecurity();
             
             if ( securityList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Securitys" );
@@ -197,7 +201,7 @@ public class SecurityRestController extends BaseSpringRestController {
 	@PutMapping("/addToPositions")
 	public void addToPositions( @RequestBody(required=true) AssignPositionsToSecurityCommand command ) {
 		try {
-			SecurityService.getSecurityInstance().addToPositions( command );   
+			service.addToPositions( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Positions", exc );
@@ -212,7 +216,7 @@ public class SecurityRestController extends BaseSpringRestController {
 	public void removeFromPositions( 	@RequestBody(required=true) RemovePositionsFromSecurityCommand command )
 	{		
 		try {
-			SecurityService.getSecurityInstance().removeFromPositions( command );
+			service.removeFromPositions( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Positions", exc );
@@ -226,7 +230,7 @@ public class SecurityRestController extends BaseSpringRestController {
 	@PutMapping("/addToTrades")
 	public void addToTrades( @RequestBody(required=true) AssignTradesToSecurityCommand command ) {
 		try {
-			SecurityService.getSecurityInstance().addToTrades( command );   
+			service.addToTrades( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Trades", exc );
@@ -241,7 +245,7 @@ public class SecurityRestController extends BaseSpringRestController {
 	public void removeFromTrades( 	@RequestBody(required=true) RemoveTradesFromSecurityCommand command )
 	{		
 		try {
-			SecurityService.getSecurityInstance().removeFromTrades( command );
+			service.removeFromTrades( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Trades", exc );
@@ -255,7 +259,7 @@ public class SecurityRestController extends BaseSpringRestController {
 	@PutMapping("/addToOrders")
 	public void addToOrders( @RequestBody(required=true) AssignOrdersToSecurityCommand command ) {
 		try {
-			SecurityService.getSecurityInstance().addToOrders( command );   
+			service.addToOrders( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Orders", exc );
@@ -270,7 +274,7 @@ public class SecurityRestController extends BaseSpringRestController {
 	public void removeFromOrders( 	@RequestBody(required=true) RemoveOrdersFromSecurityCommand command )
 	{		
 		try {
-			SecurityService.getSecurityInstance().removeFromOrders( command );
+			service.removeFromOrders( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Orders", exc );
@@ -284,6 +288,7 @@ public class SecurityRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Security security = null;
-    private static final Logger LOGGER = Logger.getLogger(SecurityRestController.class.getName());
+	protected SecurityService service = null;
+	private static final Logger LOGGER = Logger.getLogger(SecurityRestController.class.getName());
     
 }

@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Invoice")
 public class InvoiceRestController extends BaseSpringRestController {
 
+	public InvoiceRestController( InvoiceService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Invoice.  if not key provided, calls create, otherwise calls save
      * @param		Invoice	invoice
@@ -94,7 +98,7 @@ public class InvoiceRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = InvoiceService.getInvoiceInstance().createInvoice( command );
+			completableFuture = service.createInvoice( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class InvoiceRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateInvoiceCommand
 			// -----------------------------------------------
-			completableFuture = InvoiceService.getInvoiceInstance().updateInvoice(command);;
+			completableFuture = service.updateInvoice(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "InvoiceController:update() - successfully update Invoice - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class InvoiceRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteInvoiceCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	InvoiceService delegate = InvoiceService.getInvoiceInstance();
+        	InvoiceService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Invoice with key " + command.getInvoiceId() );
@@ -155,7 +159,7 @@ public class InvoiceRestController extends BaseSpringRestController {
     	Invoice entity = null;
 
     	try {  
-    		entity = InvoiceService.getInvoiceInstance().getInvoice( new InvoiceFetchOneSummary( uuid ) );   
+    		entity = service.getInvoice( new InvoiceFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Invoice using Id " + uuid );
@@ -175,7 +179,7 @@ public class InvoiceRestController extends BaseSpringRestController {
         
     	try {
             // load the Invoice
-            invoiceList = InvoiceService.getInvoiceInstance().getAllInvoice();
+            invoiceList = service.getAllInvoice();
             
             if ( invoiceList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Invoices" );
@@ -196,7 +200,7 @@ public class InvoiceRestController extends BaseSpringRestController {
 	@PutMapping("/assignMerchant")
 	public void assignMerchant( @RequestBody AssignMerchantToInvoiceCommand command ) {
 		try {
-			InvoiceService.getInvoiceInstance().assignMerchant( command );   
+			service.assignMerchant( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Merchant", exc );
@@ -210,7 +214,7 @@ public class InvoiceRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignMerchant")
 	public void unAssignMerchant( @RequestBody(required=true)  UnAssignMerchantFromInvoiceCommand command ) {
 		try {
-			InvoiceService.getInvoiceInstance().unAssignMerchant( command );   
+			service.unAssignMerchant( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Merchant", exc );
@@ -225,7 +229,7 @@ public class InvoiceRestController extends BaseSpringRestController {
 	@PutMapping("/addToPayments")
 	public void addToPayments( @RequestBody(required=true) AssignPaymentsToInvoiceCommand command ) {
 		try {
-			InvoiceService.getInvoiceInstance().addToPayments( command );   
+			service.addToPayments( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Payments", exc );
@@ -240,7 +244,7 @@ public class InvoiceRestController extends BaseSpringRestController {
 	public void removeFromPayments( 	@RequestBody(required=true) RemovePaymentsFromInvoiceCommand command )
 	{		
 		try {
-			InvoiceService.getInvoiceInstance().removeFromPayments( command );
+			service.removeFromPayments( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Payments", exc );
@@ -254,6 +258,7 @@ public class InvoiceRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Invoice invoice = null;
-    private static final Logger LOGGER = Logger.getLogger(InvoiceRestController.class.getName());
+	protected InvoiceService service = null;
+	private static final Logger LOGGER = Logger.getLogger(InvoiceRestController.class.getName());
     
 }

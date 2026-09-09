@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Merchant")
 public class MerchantRestController extends BaseSpringRestController {
 
+	public MerchantRestController( MerchantService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Merchant.  if not key provided, calls create, otherwise calls save
      * @param		Merchant	merchant
@@ -94,7 +98,7 @@ public class MerchantRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = MerchantService.getMerchantInstance().createMerchant( command );
+			completableFuture = service.createMerchant( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class MerchantRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateMerchantCommand
 			// -----------------------------------------------
-			completableFuture = MerchantService.getMerchantInstance().updateMerchant(command);;
+			completableFuture = service.updateMerchant(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "MerchantController:update() - successfully update Merchant - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class MerchantRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteMerchantCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	MerchantService delegate = MerchantService.getMerchantInstance();
+        	MerchantService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Merchant with key " + command.getMerchantId() );
@@ -155,7 +159,7 @@ public class MerchantRestController extends BaseSpringRestController {
     	Merchant entity = null;
 
     	try {  
-    		entity = MerchantService.getMerchantInstance().getMerchant( new MerchantFetchOneSummary( uuid ) );   
+    		entity = service.getMerchant( new MerchantFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Merchant using Id " + uuid );
@@ -175,7 +179,7 @@ public class MerchantRestController extends BaseSpringRestController {
         
     	try {
             // load the Merchant
-            merchantList = MerchantService.getMerchantInstance().getAllMerchant();
+            merchantList = service.getAllMerchant();
             
             if ( merchantList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Merchants" );
@@ -197,7 +201,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	@PutMapping("/addToTerminals")
 	public void addToTerminals( @RequestBody(required=true) AssignTerminalsToMerchantCommand command ) {
 		try {
-			MerchantService.getMerchantInstance().addToTerminals( command );   
+			service.addToTerminals( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Terminals", exc );
@@ -212,7 +216,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	public void removeFromTerminals( 	@RequestBody(required=true) RemoveTerminalsFromMerchantCommand command )
 	{		
 		try {
-			MerchantService.getMerchantInstance().removeFromTerminals( command );
+			service.removeFromTerminals( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Terminals", exc );
@@ -226,7 +230,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	@PutMapping("/addToPaymentContracts")
 	public void addToPaymentContracts( @RequestBody(required=true) AssignPaymentContractsToMerchantCommand command ) {
 		try {
-			MerchantService.getMerchantInstance().addToPaymentContracts( command );   
+			service.addToPaymentContracts( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set PaymentContracts", exc );
@@ -241,7 +245,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	public void removeFromPaymentContracts( 	@RequestBody(required=true) RemovePaymentContractsFromMerchantCommand command )
 	{		
 		try {
-			MerchantService.getMerchantInstance().removeFromPaymentContracts( command );
+			service.removeFromPaymentContracts( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set PaymentContracts", exc );
@@ -255,7 +259,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	@PutMapping("/addToPayouts")
 	public void addToPayouts( @RequestBody(required=true) AssignPayoutsToMerchantCommand command ) {
 		try {
-			MerchantService.getMerchantInstance().addToPayouts( command );   
+			service.addToPayouts( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Payouts", exc );
@@ -270,7 +274,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	public void removeFromPayouts( 	@RequestBody(required=true) RemovePayoutsFromMerchantCommand command )
 	{		
 		try {
-			MerchantService.getMerchantInstance().removeFromPayouts( command );
+			service.removeFromPayouts( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Payouts", exc );
@@ -284,7 +288,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	@PutMapping("/addToSettlements")
 	public void addToSettlements( @RequestBody(required=true) AssignSettlementsToMerchantCommand command ) {
 		try {
-			MerchantService.getMerchantInstance().addToSettlements( command );   
+			service.addToSettlements( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Settlements", exc );
@@ -299,7 +303,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	public void removeFromSettlements( 	@RequestBody(required=true) RemoveSettlementsFromMerchantCommand command )
 	{		
 		try {
-			MerchantService.getMerchantInstance().removeFromSettlements( command );
+			service.removeFromSettlements( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Settlements", exc );
@@ -313,7 +317,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	@PutMapping("/addToDisputes")
 	public void addToDisputes( @RequestBody(required=true) AssignDisputesToMerchantCommand command ) {
 		try {
-			MerchantService.getMerchantInstance().addToDisputes( command );   
+			service.addToDisputes( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Disputes", exc );
@@ -328,7 +332,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	public void removeFromDisputes( 	@RequestBody(required=true) RemoveDisputesFromMerchantCommand command )
 	{		
 		try {
-			MerchantService.getMerchantInstance().removeFromDisputes( command );
+			service.removeFromDisputes( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Disputes", exc );
@@ -342,7 +346,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	@PutMapping("/addToInvoices")
 	public void addToInvoices( @RequestBody(required=true) AssignInvoicesToMerchantCommand command ) {
 		try {
-			MerchantService.getMerchantInstance().addToInvoices( command );   
+			service.addToInvoices( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Invoices", exc );
@@ -357,7 +361,7 @@ public class MerchantRestController extends BaseSpringRestController {
 	public void removeFromInvoices( 	@RequestBody(required=true) RemoveInvoicesFromMerchantCommand command )
 	{		
 		try {
-			MerchantService.getMerchantInstance().removeFromInvoices( command );
+			service.removeFromInvoices( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Invoices", exc );
@@ -371,6 +375,7 @@ public class MerchantRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Merchant merchant = null;
-    private static final Logger LOGGER = Logger.getLogger(MerchantRestController.class.getName());
+	protected MerchantService service = null;
+	private static final Logger LOGGER = Logger.getLogger(MerchantRestController.class.getName());
     
 }

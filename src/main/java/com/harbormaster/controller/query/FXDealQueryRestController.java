@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/FXDealQuery")
 public class FXDealQueryRestController extends BaseSpringRestController {
 	
+	public FXDealQueryRestController( FXDealService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a FXDeal using a UUID
      * @param		UUID fXDealId
@@ -95,7 +99,7 @@ public class FXDealQueryRestController extends BaseSpringRestController {
     	FXDeal entity = null;
 
     	try {  
-    		entity = FXDealService.getFXDealInstance().getFXDeal( new FXDealFetchOneSummary( fXDealId ) );
+    		entity = service.getFXDeal( new FXDealFetchOneSummary( fXDealId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load FXDeal using Id " + fXDealId );
@@ -115,7 +119,7 @@ public class FXDealQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the FXDeal
-            fXDealList = FXDealService.getFXDealInstance().getAllFXDeal();
+            fXDealList = service.getAllFXDeal();
             
             if ( fXDealList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all FXDeals" );
@@ -135,6 +139,7 @@ public class FXDealQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected FXDeal fXDeal = null;
+    protected FXDealService service = null;
     private static final Logger LOGGER = Logger.getLogger(FXDealQueryRestController.class.getName());
     
 }

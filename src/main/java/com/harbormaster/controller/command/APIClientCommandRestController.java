@@ -100,7 +100,6 @@ public class APIClientCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateAPIClientCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createAPIClient( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class APIClientCommandRestController extends BaseSpringRestController {
 		DeleteAPIClientCommand command = new DeleteAPIClientCommand( aPIClientId );
 
     	try {
-        	APIClientService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted APIClient with key " + command.getAPIClientId() );
         }
         catch( Throwable exc ) {

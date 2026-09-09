@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/KYCDocument")
 public class KYCDocumentRestController extends BaseSpringRestController {
 
+	public KYCDocumentRestController( KYCDocumentService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a KYCDocument.  if not key provided, calls create, otherwise calls save
      * @param		KYCDocument	kYCDocument
@@ -94,7 +98,7 @@ public class KYCDocumentRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = KYCDocumentService.getKYCDocumentInstance().createKYCDocument( command );
+			completableFuture = service.createKYCDocument( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class KYCDocumentRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateKYCDocumentCommand
 			// -----------------------------------------------
-			completableFuture = KYCDocumentService.getKYCDocumentInstance().updateKYCDocument(command);;
+			completableFuture = service.updateKYCDocument(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "KYCDocumentController:update() - successfully update KYCDocument - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class KYCDocumentRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteKYCDocumentCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	KYCDocumentService delegate = KYCDocumentService.getKYCDocumentInstance();
+        	KYCDocumentService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted KYCDocument with key " + command.getKYCDocumentId() );
@@ -155,7 +159,7 @@ public class KYCDocumentRestController extends BaseSpringRestController {
     	KYCDocument entity = null;
 
     	try {  
-    		entity = KYCDocumentService.getKYCDocumentInstance().getKYCDocument( new KYCDocumentFetchOneSummary( uuid ) );   
+    		entity = service.getKYCDocument( new KYCDocumentFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load KYCDocument using Id " + uuid );
@@ -175,7 +179,7 @@ public class KYCDocumentRestController extends BaseSpringRestController {
         
     	try {
             // load the KYCDocument
-            kYCDocumentList = KYCDocumentService.getKYCDocumentInstance().getAllKYCDocument();
+            kYCDocumentList = service.getAllKYCDocument();
             
             if ( kYCDocumentList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all KYCDocuments" );
@@ -196,7 +200,7 @@ public class KYCDocumentRestController extends BaseSpringRestController {
 	@PutMapping("/assignKycProfile")
 	public void assignKycProfile( @RequestBody AssignKycProfileToKYCDocumentCommand command ) {
 		try {
-			KYCDocumentService.getKYCDocumentInstance().assignKycProfile( command );   
+			service.assignKycProfile( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign KycProfile", exc );
@@ -210,7 +214,7 @@ public class KYCDocumentRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignKycProfile")
 	public void unAssignKycProfile( @RequestBody(required=true)  UnAssignKycProfileFromKYCDocumentCommand command ) {
 		try {
-			KYCDocumentService.getKYCDocumentInstance().unAssignKycProfile( command );   
+			service.unAssignKycProfile( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign KycProfile", exc );
@@ -225,6 +229,7 @@ public class KYCDocumentRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected KYCDocument kYCDocument = null;
-    private static final Logger LOGGER = Logger.getLogger(KYCDocumentRestController.class.getName());
+	protected KYCDocumentService service = null;
+	private static final Logger LOGGER = Logger.getLogger(KYCDocumentRestController.class.getName());
     
 }

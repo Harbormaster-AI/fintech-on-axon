@@ -72,7 +72,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateInvoiceEvent</li>
  *      <li>DeleteInvoiceEvent</li>
    *       <li>AssignMerchantToInvoiceEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignMerchantFromInvoiceEvent</li>
    *       <li>AssignPaymentsToInvoiceEvent</li>
  *       <li>RemovePaymentsFromInvoiceEvent</li>
   *        </ul>
@@ -225,8 +225,8 @@ public class InvoiceAggregate {
     private UUID invoiceId;
     
     private String invoiceNumber;
-    private Date issueDate;
-    private Date dueDate;
+    private  Date issueDate;
+    private  Date dueDate;
     private Money total;
     private String currency;
     private InvoiceStatus status;

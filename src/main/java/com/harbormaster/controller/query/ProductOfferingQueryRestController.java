@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/ProductOfferingQuery")
 public class ProductOfferingQueryRestController extends BaseSpringRestController {
 	
+	public ProductOfferingQueryRestController( ProductOfferingService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a ProductOffering using a UUID
      * @param		UUID productOfferingId
@@ -95,7 +99,7 @@ public class ProductOfferingQueryRestController extends BaseSpringRestController
     	ProductOffering entity = null;
 
     	try {  
-    		entity = ProductOfferingService.getProductOfferingInstance().getProductOffering( new ProductOfferingFetchOneSummary( productOfferingId ) );
+    		entity = service.getProductOffering( new ProductOfferingFetchOneSummary( productOfferingId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load ProductOffering using Id " + productOfferingId );
@@ -115,7 +119,7 @@ public class ProductOfferingQueryRestController extends BaseSpringRestController
         
     	try {
             // load the ProductOffering
-            productOfferingList = ProductOfferingService.getProductOfferingInstance().getAllProductOffering();
+            productOfferingList = service.getAllProductOffering();
             
             if ( productOfferingList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all ProductOfferings" );
@@ -135,6 +139,7 @@ public class ProductOfferingQueryRestController extends BaseSpringRestController
 // Attributes
 //************************************************************************
     protected ProductOffering productOffering = null;
+    protected ProductOfferingService service = null;
     private static final Logger LOGGER = Logger.getLogger(ProductOfferingQueryRestController.class.getName());
     
 }

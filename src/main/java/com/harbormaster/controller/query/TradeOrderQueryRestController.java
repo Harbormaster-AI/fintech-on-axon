@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/TradeOrderQuery")
 public class TradeOrderQueryRestController extends BaseSpringRestController {
 	
+	public TradeOrderQueryRestController( TradeOrderService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a TradeOrder using a UUID
      * @param		UUID tradeOrderId
@@ -95,7 +99,7 @@ public class TradeOrderQueryRestController extends BaseSpringRestController {
     	TradeOrder entity = null;
 
     	try {  
-    		entity = TradeOrderService.getTradeOrderInstance().getTradeOrder( new TradeOrderFetchOneSummary( tradeOrderId ) );
+    		entity = service.getTradeOrder( new TradeOrderFetchOneSummary( tradeOrderId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load TradeOrder using Id " + tradeOrderId );
@@ -115,7 +119,7 @@ public class TradeOrderQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the TradeOrder
-            tradeOrderList = TradeOrderService.getTradeOrderInstance().getAllTradeOrder();
+            tradeOrderList = service.getAllTradeOrder();
             
             if ( tradeOrderList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all TradeOrders" );
@@ -135,6 +139,7 @@ public class TradeOrderQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected TradeOrder tradeOrder = null;
+    protected TradeOrderService service = null;
     private static final Logger LOGGER = Logger.getLogger(TradeOrderQueryRestController.class.getName());
     
 }

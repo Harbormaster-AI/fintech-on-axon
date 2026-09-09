@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/MerchantQuery")
 public class MerchantQueryRestController extends BaseSpringRestController {
 	
+	public MerchantQueryRestController( MerchantService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Merchant using a UUID
      * @param		UUID merchantId
@@ -95,7 +99,7 @@ public class MerchantQueryRestController extends BaseSpringRestController {
     	Merchant entity = null;
 
     	try {  
-    		entity = MerchantService.getMerchantInstance().getMerchant( new MerchantFetchOneSummary( merchantId ) );
+    		entity = service.getMerchant( new MerchantFetchOneSummary( merchantId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Merchant using Id " + merchantId );
@@ -115,7 +119,7 @@ public class MerchantQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Merchant
-            merchantList = MerchantService.getMerchantInstance().getAllMerchant();
+            merchantList = service.getAllMerchant();
             
             if ( merchantList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Merchants" );
@@ -135,6 +139,7 @@ public class MerchantQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Merchant merchant = null;
+    protected MerchantService service = null;
     private static final Logger LOGGER = Logger.getLogger(MerchantQueryRestController.class.getName());
     
 }

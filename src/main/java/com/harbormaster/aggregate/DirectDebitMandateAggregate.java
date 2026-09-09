@@ -67,9 +67,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateDirectDebitMandateEvent</li>
  *      <li>DeleteDirectDebitMandateEvent</li>
    *       <li>AssignAccountToDirectDebitMandateEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignAccountFromDirectDebitMandateEvent</li>
   *       <li>AssignCreditorToDirectDebitMandateEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCreditorFromDirectDebitMandateEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

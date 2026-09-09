@@ -100,7 +100,6 @@ public class CompliancePolicyCommandRestController extends BaseSpringRestControl
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateCompliancePolicyCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createCompliancePolicy( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class CompliancePolicyCommandRestController extends BaseSpringRestControl
 		DeleteCompliancePolicyCommand command = new DeleteCompliancePolicyCommand( compliancePolicyId );
 
     	try {
-        	CompliancePolicyService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted CompliancePolicy with key " + command.getCompliancePolicyId() );
         }
         catch( Throwable exc ) {

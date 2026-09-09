@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Transaction")
 public class TransactionRestController extends BaseSpringRestController {
 
+	public TransactionRestController( TransactionService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Transaction.  if not key provided, calls create, otherwise calls save
      * @param		Transaction	transaction
@@ -94,7 +98,7 @@ public class TransactionRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = TransactionService.getTransactionInstance().createTransaction( command );
+			completableFuture = service.createTransaction( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class TransactionRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateTransactionCommand
 			// -----------------------------------------------
-			completableFuture = TransactionService.getTransactionInstance().updateTransaction(command);;
+			completableFuture = service.updateTransaction(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "TransactionController:update() - successfully update Transaction - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class TransactionRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteTransactionCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	TransactionService delegate = TransactionService.getTransactionInstance();
+        	TransactionService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Transaction with key " + command.getTransactionId() );
@@ -155,7 +159,7 @@ public class TransactionRestController extends BaseSpringRestController {
     	Transaction entity = null;
 
     	try {  
-    		entity = TransactionService.getTransactionInstance().getTransaction( new TransactionFetchOneSummary( uuid ) );   
+    		entity = service.getTransaction( new TransactionFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Transaction using Id " + uuid );
@@ -175,7 +179,7 @@ public class TransactionRestController extends BaseSpringRestController {
         
     	try {
             // load the Transaction
-            transactionList = TransactionService.getTransactionInstance().getAllTransaction();
+            transactionList = service.getAllTransaction();
             
             if ( transactionList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Transactions" );
@@ -196,7 +200,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/assignAccount")
 	public void assignAccount( @RequestBody AssignAccountToTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().assignAccount( command );   
+			service.assignAccount( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Account", exc );
@@ -210,7 +214,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignAccount")
 	public void unAssignAccount( @RequestBody(required=true)  UnAssignAccountFromTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().unAssignAccount( command );   
+			service.unAssignAccount( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Account", exc );
@@ -224,7 +228,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/assignWallet")
 	public void assignWallet( @RequestBody AssignWalletToTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().assignWallet( command );   
+			service.assignWallet( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Wallet", exc );
@@ -238,7 +242,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignWallet")
 	public void unAssignWallet( @RequestBody(required=true)  UnAssignWalletFromTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().unAssignWallet( command );   
+			service.unAssignWallet( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Wallet", exc );
@@ -252,7 +256,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/assignPaymentOrder")
 	public void assignPaymentOrder( @RequestBody AssignPaymentOrderToTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().assignPaymentOrder( command );   
+			service.assignPaymentOrder( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign PaymentOrder", exc );
@@ -266,7 +270,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignPaymentOrder")
 	public void unAssignPaymentOrder( @RequestBody(required=true)  UnAssignPaymentOrderFromTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().unAssignPaymentOrder( command );   
+			service.unAssignPaymentOrder( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign PaymentOrder", exc );
@@ -280,7 +284,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/assignMerchant")
 	public void assignMerchant( @RequestBody AssignMerchantToTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().assignMerchant( command );   
+			service.assignMerchant( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Merchant", exc );
@@ -294,7 +298,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignMerchant")
 	public void unAssignMerchant( @RequestBody(required=true)  UnAssignMerchantFromTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().unAssignMerchant( command );   
+			service.unAssignMerchant( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Merchant", exc );
@@ -308,7 +312,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/assignCard")
 	public void assignCard( @RequestBody AssignCardToTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().assignCard( command );   
+			service.assignCard( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Card", exc );
@@ -322,7 +326,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignCard")
 	public void unAssignCard( @RequestBody(required=true)  UnAssignCardFromTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().unAssignCard( command );   
+			service.unAssignCard( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Card", exc );
@@ -337,7 +341,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/addToRelatedTransactions")
 	public void addToRelatedTransactions( @RequestBody(required=true) AssignRelatedTransactionsToTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().addToRelatedTransactions( command );   
+			service.addToRelatedTransactions( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set RelatedTransactions", exc );
@@ -352,7 +356,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	public void removeFromRelatedTransactions( 	@RequestBody(required=true) RemoveRelatedTransactionsFromTransactionCommand command )
 	{		
 		try {
-			TransactionService.getTransactionInstance().removeFromRelatedTransactions( command );
+			service.removeFromRelatedTransactions( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set RelatedTransactions", exc );
@@ -366,7 +370,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	@PutMapping("/addToAlerts")
 	public void addToAlerts( @RequestBody(required=true) AssignAlertsToTransactionCommand command ) {
 		try {
-			TransactionService.getTransactionInstance().addToAlerts( command );   
+			service.addToAlerts( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Alerts", exc );
@@ -381,7 +385,7 @@ public class TransactionRestController extends BaseSpringRestController {
 	public void removeFromAlerts( 	@RequestBody(required=true) RemoveAlertsFromTransactionCommand command )
 	{		
 		try {
-			TransactionService.getTransactionInstance().removeFromAlerts( command );
+			service.removeFromAlerts( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Alerts", exc );
@@ -395,6 +399,7 @@ public class TransactionRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Transaction transaction = null;
-    private static final Logger LOGGER = Logger.getLogger(TransactionRestController.class.getName());
+	protected TransactionService service = null;
+	private static final Logger LOGGER = Logger.getLogger(TransactionRestController.class.getName());
     
 }

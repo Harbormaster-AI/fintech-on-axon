@@ -76,11 +76,11 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateDisputeEvent</li>
  *      <li>DeleteDisputeEvent</li>
    *       <li>AssignTransactionToDisputeEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignTransactionFromDisputeEvent</li>
   *       <li>AssignCardToDisputeEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCardFromDisputeEvent</li>
   *       <li>AssignMerchantToDisputeEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignMerchantFromDisputeEvent</li>
    *       <li>AssignChargebacksToDisputeEvent</li>
  *       <li>RemoveChargebacksFromDisputeEvent</li>
   *        </ul>

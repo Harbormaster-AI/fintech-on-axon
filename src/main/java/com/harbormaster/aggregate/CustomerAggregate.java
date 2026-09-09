@@ -135,7 +135,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateCustomerEvent</li>
  *      <li>DeleteCustomerEvent</li>
    *       <li>AssignInstitutionToCustomerEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignInstitutionFromCustomerEvent</li>
    *       <li>AssignAccountsToCustomerEvent</li>
  *       <li>RemoveAccountsFromCustomerEvent</li>
   *       <li>AssignWalletsToCustomerEvent</li>
@@ -610,7 +610,7 @@ public class CustomerAggregate {
     
     private String firstName;
     private String lastName;
-    private Date dateOfBirth;
+    private  Date dateOfBirth;
     private Email email;
     private PhoneNumber phone;
     private Address address;

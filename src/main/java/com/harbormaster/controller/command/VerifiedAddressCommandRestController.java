@@ -100,7 +100,6 @@ public class VerifiedAddressCommandRestController extends BaseSpringRestControll
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateVerifiedAddressCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createVerifiedAddress( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class VerifiedAddressCommandRestController extends BaseSpringRestControll
 		DeleteVerifiedAddressCommand command = new DeleteVerifiedAddressCommand( verifiedAddressId );
 
     	try {
-        	VerifiedAddressService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted VerifiedAddress with key " + command.getVerifiedAddressId() );
         }
         catch( Throwable exc ) {

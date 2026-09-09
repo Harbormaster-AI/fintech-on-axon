@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/CardTokenization")
 public class CardTokenizationRestController extends BaseSpringRestController {
 
+	public CardTokenizationRestController( CardTokenizationService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a CardTokenization.  if not key provided, calls create, otherwise calls save
      * @param		CardTokenization	cardTokenization
@@ -94,7 +98,7 @@ public class CardTokenizationRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = CardTokenizationService.getCardTokenizationInstance().createCardTokenization( command );
+			completableFuture = service.createCardTokenization( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class CardTokenizationRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateCardTokenizationCommand
 			// -----------------------------------------------
-			completableFuture = CardTokenizationService.getCardTokenizationInstance().updateCardTokenization(command);;
+			completableFuture = service.updateCardTokenization(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "CardTokenizationController:update() - successfully update CardTokenization - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class CardTokenizationRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteCardTokenizationCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	CardTokenizationService delegate = CardTokenizationService.getCardTokenizationInstance();
+        	CardTokenizationService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted CardTokenization with key " + command.getCardTokenizationId() );
@@ -155,7 +159,7 @@ public class CardTokenizationRestController extends BaseSpringRestController {
     	CardTokenization entity = null;
 
     	try {  
-    		entity = CardTokenizationService.getCardTokenizationInstance().getCardTokenization( new CardTokenizationFetchOneSummary( uuid ) );   
+    		entity = service.getCardTokenization( new CardTokenizationFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load CardTokenization using Id " + uuid );
@@ -175,7 +179,7 @@ public class CardTokenizationRestController extends BaseSpringRestController {
         
     	try {
             // load the CardTokenization
-            cardTokenizationList = CardTokenizationService.getCardTokenizationInstance().getAllCardTokenization();
+            cardTokenizationList = service.getAllCardTokenization();
             
             if ( cardTokenizationList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all CardTokenizations" );
@@ -196,7 +200,7 @@ public class CardTokenizationRestController extends BaseSpringRestController {
 	@PutMapping("/assignCard")
 	public void assignCard( @RequestBody AssignCardToCardTokenizationCommand command ) {
 		try {
-			CardTokenizationService.getCardTokenizationInstance().assignCard( command );   
+			service.assignCard( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Card", exc );
@@ -210,7 +214,7 @@ public class CardTokenizationRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignCard")
 	public void unAssignCard( @RequestBody(required=true)  UnAssignCardFromCardTokenizationCommand command ) {
 		try {
-			CardTokenizationService.getCardTokenizationInstance().unAssignCard( command );   
+			service.unAssignCard( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Card", exc );
@@ -225,6 +229,7 @@ public class CardTokenizationRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected CardTokenization cardTokenization = null;
-    private static final Logger LOGGER = Logger.getLogger(CardTokenizationRestController.class.getName());
+	protected CardTokenizationService service = null;
+	private static final Logger LOGGER = Logger.getLogger(CardTokenizationRestController.class.getName());
     
 }

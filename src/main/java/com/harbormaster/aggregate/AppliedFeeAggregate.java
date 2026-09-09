@@ -67,9 +67,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateAppliedFeeEvent</li>
  *      <li>DeleteAppliedFeeEvent</li>
    *       <li>AssignPaymentOrderToAppliedFeeEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignPaymentOrderFromAppliedFeeEvent</li>
   *       <li>AssignTransactionToAppliedFeeEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignTransactionFromAppliedFeeEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

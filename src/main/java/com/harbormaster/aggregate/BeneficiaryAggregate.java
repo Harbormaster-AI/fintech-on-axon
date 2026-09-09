@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateBeneficiaryEvent</li>
  *      <li>DeleteBeneficiaryEvent</li>
    *       <li>AssignCustomerToBeneficiaryEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCustomerFromBeneficiaryEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

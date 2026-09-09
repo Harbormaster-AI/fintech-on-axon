@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/PaymentCard")
 public class PaymentCardRestController extends BaseSpringRestController {
 
+	public PaymentCardRestController( PaymentCardService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a PaymentCard.  if not key provided, calls create, otherwise calls save
      * @param		PaymentCard	paymentCard
@@ -94,7 +98,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = PaymentCardService.getPaymentCardInstance().createPaymentCard( command );
+			completableFuture = service.createPaymentCard( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdatePaymentCardCommand
 			// -----------------------------------------------
-			completableFuture = PaymentCardService.getPaymentCardInstance().updatePaymentCard(command);;
+			completableFuture = service.updatePaymentCard(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "PaymentCardController:update() - successfully update PaymentCard - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeletePaymentCardCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	PaymentCardService delegate = PaymentCardService.getPaymentCardInstance();
+        	PaymentCardService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted PaymentCard with key " + command.getPaymentCardId() );
@@ -155,7 +159,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
     	PaymentCard entity = null;
 
     	try {  
-    		entity = PaymentCardService.getPaymentCardInstance().getPaymentCard( new PaymentCardFetchOneSummary( uuid ) );   
+    		entity = service.getPaymentCard( new PaymentCardFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load PaymentCard using Id " + uuid );
@@ -175,7 +179,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
         
     	try {
             // load the PaymentCard
-            paymentCardList = PaymentCardService.getPaymentCardInstance().getAllPaymentCard();
+            paymentCardList = service.getAllPaymentCard();
             
             if ( paymentCardList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all PaymentCards" );
@@ -196,7 +200,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
 	@PutMapping("/assignCustomer")
 	public void assignCustomer( @RequestBody AssignCustomerToPaymentCardCommand command ) {
 		try {
-			PaymentCardService.getPaymentCardInstance().assignCustomer( command );   
+			service.assignCustomer( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Customer", exc );
@@ -210,7 +214,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignCustomer")
 	public void unAssignCustomer( @RequestBody(required=true)  UnAssignCustomerFromPaymentCardCommand command ) {
 		try {
-			PaymentCardService.getPaymentCardInstance().unAssignCustomer( command );   
+			service.unAssignCustomer( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Customer", exc );
@@ -224,7 +228,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
 	@PutMapping("/assignAccount")
 	public void assignAccount( @RequestBody AssignAccountToPaymentCardCommand command ) {
 		try {
-			PaymentCardService.getPaymentCardInstance().assignAccount( command );   
+			service.assignAccount( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Account", exc );
@@ -238,7 +242,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignAccount")
 	public void unAssignAccount( @RequestBody(required=true)  UnAssignAccountFromPaymentCardCommand command ) {
 		try {
-			PaymentCardService.getPaymentCardInstance().unAssignAccount( command );   
+			service.unAssignAccount( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Account", exc );
@@ -253,7 +257,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
 	@PutMapping("/addToTokenizations")
 	public void addToTokenizations( @RequestBody(required=true) AssignTokenizationsToPaymentCardCommand command ) {
 		try {
-			PaymentCardService.getPaymentCardInstance().addToTokenizations( command );   
+			service.addToTokenizations( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Tokenizations", exc );
@@ -268,7 +272,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
 	public void removeFromTokenizations( 	@RequestBody(required=true) RemoveTokenizationsFromPaymentCardCommand command )
 	{		
 		try {
-			PaymentCardService.getPaymentCardInstance().removeFromTokenizations( command );
+			service.removeFromTokenizations( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Tokenizations", exc );
@@ -282,7 +286,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
 	@PutMapping("/addToDisputes")
 	public void addToDisputes( @RequestBody(required=true) AssignDisputesToPaymentCardCommand command ) {
 		try {
-			PaymentCardService.getPaymentCardInstance().addToDisputes( command );   
+			service.addToDisputes( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Disputes", exc );
@@ -297,7 +301,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
 	public void removeFromDisputes( 	@RequestBody(required=true) RemoveDisputesFromPaymentCardCommand command )
 	{		
 		try {
-			PaymentCardService.getPaymentCardInstance().removeFromDisputes( command );
+			service.removeFromDisputes( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Disputes", exc );
@@ -311,6 +315,7 @@ public class PaymentCardRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected PaymentCard paymentCard = null;
-    private static final Logger LOGGER = Logger.getLogger(PaymentCardRestController.class.getName());
+	protected PaymentCardService service = null;
+	private static final Logger LOGGER = Logger.getLogger(PaymentCardRestController.class.getName());
     
 }

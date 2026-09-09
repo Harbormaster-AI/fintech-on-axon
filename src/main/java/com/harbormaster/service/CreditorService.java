@@ -34,7 +34,7 @@ import org.axonframework.queryhandling.QueryGateway;
 import org.axonframework.queryhandling.QueryUpdateEmitter;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.springframework.stereotype.Service;
-
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -101,10 +101,16 @@ extends BaseService {
      * Default Constructor 
      */
     public CreditorService()  {
-    	queryGateway 		= applicationContext.getBean(QueryGateway.class);
-    	commandGateway 		= applicationContext.getBean(CommandGateway.class);
-    	queryUpdateEmitter  = applicationContext.getBean(QueryUpdateEmitter.class);
-		validator			= applicationContext.getBean(CreditorValidator.class);
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+		super.setApplicationContext(ctx);
+
+		queryGateway 		= ctx.getBean(QueryGateway.class);
+		commandGateway 		= ctx.getBean(CommandGateway.class);
+		queryUpdateEmitter  = ctx.getBean(QueryUpdateEmitter.class);
+		validator			= ctx.getBean(CreditorValidator.class);
 	}
 
 
@@ -379,10 +385,10 @@ extends BaseService {
 //************************************************************************
 // Attributes
 //************************************************************************
-	private final QueryGateway queryGateway;
-	private final CommandGateway commandGateway;
-	private final QueryUpdateEmitter queryUpdateEmitter;
-	private final CreditorValidator validator;
+	private QueryGateway queryGateway;
+	private CommandGateway commandGateway;
+	private QueryUpdateEmitter queryUpdateEmitter;
+	private CreditorValidator validator;
 	private Creditor creditor 	= null;
     private static final Logger LOGGER 			= Logger.getLogger(CreditorService.class.getName());
     

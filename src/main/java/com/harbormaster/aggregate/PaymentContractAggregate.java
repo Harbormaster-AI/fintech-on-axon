@@ -67,9 +67,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdatePaymentContractEvent</li>
  *      <li>DeletePaymentContractEvent</li>
    *       <li>AssignMerchantToPaymentContractEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignMerchantFromPaymentContractEvent</li>
   *       <li>AssignAcquirerToPaymentContractEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignAcquirerFromPaymentContractEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

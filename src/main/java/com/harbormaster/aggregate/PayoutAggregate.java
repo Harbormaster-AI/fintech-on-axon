@@ -69,11 +69,11 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdatePayoutEvent</li>
  *      <li>DeletePayoutEvent</li>
    *       <li>AssignMerchantToPayoutEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignMerchantFromPayoutEvent</li>
   *       <li>AssignSettlementBatchToPayoutEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignSettlementBatchFromPayoutEvent</li>
   *       <li>AssignDestinationAccountToPayoutEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignDestinationAccountFromPayoutEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>
@@ -257,8 +257,8 @@ public class PayoutAggregate {
     private String payoutReference;
     private Money amount;
     private String currency;
-    private Date scheduledDate;
-    private Date paidDate;
+    private  Date scheduledDate;
+    private  Date paidDate;
     private PayoutStatus status;
     private Merchant merchant = null;
     private SettlementBatch settlementBatch = null;

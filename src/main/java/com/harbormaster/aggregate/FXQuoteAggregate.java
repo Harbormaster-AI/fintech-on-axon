@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateFXQuoteEvent</li>
  *      <li>DeleteFXQuoteEvent</li>
    *       <li>AssignRequestedByToFXQuoteEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignRequestedByFromFXQuoteEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

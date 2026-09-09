@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/AppliedFeeQuery")
 public class AppliedFeeQueryRestController extends BaseSpringRestController {
 	
+	public AppliedFeeQueryRestController( AppliedFeeService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a AppliedFee using a UUID
      * @param		UUID appliedFeeId
@@ -95,7 +99,7 @@ public class AppliedFeeQueryRestController extends BaseSpringRestController {
     	AppliedFee entity = null;
 
     	try {  
-    		entity = AppliedFeeService.getAppliedFeeInstance().getAppliedFee( new AppliedFeeFetchOneSummary( appliedFeeId ) );
+    		entity = service.getAppliedFee( new AppliedFeeFetchOneSummary( appliedFeeId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load AppliedFee using Id " + appliedFeeId );
@@ -115,7 +119,7 @@ public class AppliedFeeQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the AppliedFee
-            appliedFeeList = AppliedFeeService.getAppliedFeeInstance().getAllAppliedFee();
+            appliedFeeList = service.getAllAppliedFee();
             
             if ( appliedFeeList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all AppliedFees" );
@@ -135,6 +139,7 @@ public class AppliedFeeQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected AppliedFee appliedFee = null;
+    protected AppliedFeeService service = null;
     private static final Logger LOGGER = Logger.getLogger(AppliedFeeQueryRestController.class.getName());
     
 }

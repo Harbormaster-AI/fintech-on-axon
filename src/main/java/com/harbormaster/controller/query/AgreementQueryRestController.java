@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/AgreementQuery")
 public class AgreementQueryRestController extends BaseSpringRestController {
 	
+	public AgreementQueryRestController( AgreementService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Agreement using a UUID
      * @param		UUID agreementId
@@ -95,7 +99,7 @@ public class AgreementQueryRestController extends BaseSpringRestController {
     	Agreement entity = null;
 
     	try {  
-    		entity = AgreementService.getAgreementInstance().getAgreement( new AgreementFetchOneSummary( agreementId ) );
+    		entity = service.getAgreement( new AgreementFetchOneSummary( agreementId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Agreement using Id " + agreementId );
@@ -115,7 +119,7 @@ public class AgreementQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Agreement
-            agreementList = AgreementService.getAgreementInstance().getAllAgreement();
+            agreementList = service.getAllAgreement();
             
             if ( agreementList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Agreements" );
@@ -135,6 +139,7 @@ public class AgreementQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Agreement agreement = null;
+    protected AgreementService service = null;
     private static final Logger LOGGER = Logger.getLogger(AgreementQueryRestController.class.getName());
     
 }

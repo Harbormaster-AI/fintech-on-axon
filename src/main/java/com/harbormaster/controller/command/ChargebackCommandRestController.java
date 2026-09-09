@@ -100,7 +100,6 @@ public class ChargebackCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateChargebackCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createChargeback( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class ChargebackCommandRestController extends BaseSpringRestController {
 		DeleteChargebackCommand command = new DeleteChargebackCommand( chargebackId );
 
     	try {
-        	ChargebackService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Chargeback with key " + command.getChargebackId() );
         }
         catch( Throwable exc ) {

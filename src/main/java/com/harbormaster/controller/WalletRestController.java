@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Wallet")
 public class WalletRestController extends BaseSpringRestController {
 
+	public WalletRestController( WalletService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Wallet.  if not key provided, calls create, otherwise calls save
      * @param		Wallet	wallet
@@ -94,7 +98,7 @@ public class WalletRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = WalletService.getWalletInstance().createWallet( command );
+			completableFuture = service.createWallet( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class WalletRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateWalletCommand
 			// -----------------------------------------------
-			completableFuture = WalletService.getWalletInstance().updateWallet(command);;
+			completableFuture = service.updateWallet(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "WalletController:update() - successfully update Wallet - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class WalletRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteWalletCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	WalletService delegate = WalletService.getWalletInstance();
+        	WalletService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Wallet with key " + command.getWalletId() );
@@ -155,7 +159,7 @@ public class WalletRestController extends BaseSpringRestController {
     	Wallet entity = null;
 
     	try {  
-    		entity = WalletService.getWalletInstance().getWallet( new WalletFetchOneSummary( uuid ) );   
+    		entity = service.getWallet( new WalletFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Wallet using Id " + uuid );
@@ -175,7 +179,7 @@ public class WalletRestController extends BaseSpringRestController {
         
     	try {
             // load the Wallet
-            walletList = WalletService.getWalletInstance().getAllWallet();
+            walletList = service.getAllWallet();
             
             if ( walletList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Wallets" );
@@ -196,7 +200,7 @@ public class WalletRestController extends BaseSpringRestController {
 	@PutMapping("/assignCustomer")
 	public void assignCustomer( @RequestBody AssignCustomerToWalletCommand command ) {
 		try {
-			WalletService.getWalletInstance().assignCustomer( command );   
+			service.assignCustomer( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Customer", exc );
@@ -210,7 +214,7 @@ public class WalletRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignCustomer")
 	public void unAssignCustomer( @RequestBody(required=true)  UnAssignCustomerFromWalletCommand command ) {
 		try {
-			WalletService.getWalletInstance().unAssignCustomer( command );   
+			service.unAssignCustomer( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Customer", exc );
@@ -225,7 +229,7 @@ public class WalletRestController extends BaseSpringRestController {
 	@PutMapping("/addToTransactions")
 	public void addToTransactions( @RequestBody(required=true) AssignTransactionsToWalletCommand command ) {
 		try {
-			WalletService.getWalletInstance().addToTransactions( command );   
+			service.addToTransactions( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Transactions", exc );
@@ -240,7 +244,7 @@ public class WalletRestController extends BaseSpringRestController {
 	public void removeFromTransactions( 	@RequestBody(required=true) RemoveTransactionsFromWalletCommand command )
 	{		
 		try {
-			WalletService.getWalletInstance().removeFromTransactions( command );
+			service.removeFromTransactions( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Transactions", exc );
@@ -254,6 +258,7 @@ public class WalletRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Wallet wallet = null;
-    private static final Logger LOGGER = Logger.getLogger(WalletRestController.class.getName());
+	protected WalletService service = null;
+	private static final Logger LOGGER = Logger.getLogger(WalletRestController.class.getName());
     
 }

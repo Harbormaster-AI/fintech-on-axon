@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateKYCDocumentEvent</li>
  *      <li>DeleteKYCDocumentEvent</li>
    *       <li>AssignKycProfileToKYCDocumentEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignKycProfileFromKYCDocumentEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>
@@ -182,7 +182,7 @@ public class KYCDocumentAggregate {
     
     private DocumentReference reference;
     private String issuedCountry;
-    private Date expirationDate;
+    private  Date expirationDate;
     private KYCDocumentType documentType;
     private DocumentStatus status;
     private KYCProfile kycProfile = null;

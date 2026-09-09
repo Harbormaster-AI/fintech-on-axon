@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/PaymentProcessorQuery")
 public class PaymentProcessorQueryRestController extends BaseSpringRestController {
 	
+	public PaymentProcessorQueryRestController( PaymentProcessorService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a PaymentProcessor using a UUID
      * @param		UUID paymentProcessorId
@@ -95,7 +99,7 @@ public class PaymentProcessorQueryRestController extends BaseSpringRestControlle
     	PaymentProcessor entity = null;
 
     	try {  
-    		entity = PaymentProcessorService.getPaymentProcessorInstance().getPaymentProcessor( new PaymentProcessorFetchOneSummary( paymentProcessorId ) );
+    		entity = service.getPaymentProcessor( new PaymentProcessorFetchOneSummary( paymentProcessorId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load PaymentProcessor using Id " + paymentProcessorId );
@@ -115,7 +119,7 @@ public class PaymentProcessorQueryRestController extends BaseSpringRestControlle
         
     	try {
             // load the PaymentProcessor
-            paymentProcessorList = PaymentProcessorService.getPaymentProcessorInstance().getAllPaymentProcessor();
+            paymentProcessorList = service.getAllPaymentProcessor();
             
             if ( paymentProcessorList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all PaymentProcessors" );
@@ -135,6 +139,7 @@ public class PaymentProcessorQueryRestController extends BaseSpringRestControlle
 // Attributes
 //************************************************************************
     protected PaymentProcessor paymentProcessor = null;
+    protected PaymentProcessorService service = null;
     private static final Logger LOGGER = Logger.getLogger(PaymentProcessorQueryRestController.class.getName());
     
 }

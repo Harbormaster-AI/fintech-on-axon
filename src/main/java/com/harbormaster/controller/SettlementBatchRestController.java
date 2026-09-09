@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/SettlementBatch")
 public class SettlementBatchRestController extends BaseSpringRestController {
 
+	public SettlementBatchRestController( SettlementBatchService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a SettlementBatch.  if not key provided, calls create, otherwise calls save
      * @param		SettlementBatch	settlementBatch
@@ -94,7 +98,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = SettlementBatchService.getSettlementBatchInstance().createSettlementBatch( command );
+			completableFuture = service.createSettlementBatch( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateSettlementBatchCommand
 			// -----------------------------------------------
-			completableFuture = SettlementBatchService.getSettlementBatchInstance().updateSettlementBatch(command);;
+			completableFuture = service.updateSettlementBatch(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "SettlementBatchController:update() - successfully update SettlementBatch - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteSettlementBatchCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	SettlementBatchService delegate = SettlementBatchService.getSettlementBatchInstance();
+        	SettlementBatchService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted SettlementBatch with key " + command.getSettlementBatchId() );
@@ -155,7 +159,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
     	SettlementBatch entity = null;
 
     	try {  
-    		entity = SettlementBatchService.getSettlementBatchInstance().getSettlementBatch( new SettlementBatchFetchOneSummary( uuid ) );   
+    		entity = service.getSettlementBatch( new SettlementBatchFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load SettlementBatch using Id " + uuid );
@@ -175,7 +179,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
         
     	try {
             // load the SettlementBatch
-            settlementBatchList = SettlementBatchService.getSettlementBatchInstance().getAllSettlementBatch();
+            settlementBatchList = service.getAllSettlementBatch();
             
             if ( settlementBatchList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all SettlementBatchs" );
@@ -196,7 +200,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
 	@PutMapping("/assignProcessor")
 	public void assignProcessor( @RequestBody AssignProcessorToSettlementBatchCommand command ) {
 		try {
-			SettlementBatchService.getSettlementBatchInstance().assignProcessor( command );   
+			service.assignProcessor( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Processor", exc );
@@ -210,7 +214,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignProcessor")
 	public void unAssignProcessor( @RequestBody(required=true)  UnAssignProcessorFromSettlementBatchCommand command ) {
 		try {
-			SettlementBatchService.getSettlementBatchInstance().unAssignProcessor( command );   
+			service.unAssignProcessor( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Processor", exc );
@@ -224,7 +228,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
 	@PutMapping("/assignMerchant")
 	public void assignMerchant( @RequestBody AssignMerchantToSettlementBatchCommand command ) {
 		try {
-			SettlementBatchService.getSettlementBatchInstance().assignMerchant( command );   
+			service.assignMerchant( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Merchant", exc );
@@ -238,7 +242,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignMerchant")
 	public void unAssignMerchant( @RequestBody(required=true)  UnAssignMerchantFromSettlementBatchCommand command ) {
 		try {
-			SettlementBatchService.getSettlementBatchInstance().unAssignMerchant( command );   
+			service.unAssignMerchant( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Merchant", exc );
@@ -253,7 +257,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
 	@PutMapping("/addToPayouts")
 	public void addToPayouts( @RequestBody(required=true) AssignPayoutsToSettlementBatchCommand command ) {
 		try {
-			SettlementBatchService.getSettlementBatchInstance().addToPayouts( command );   
+			service.addToPayouts( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Payouts", exc );
@@ -268,7 +272,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
 	public void removeFromPayouts( 	@RequestBody(required=true) RemovePayoutsFromSettlementBatchCommand command )
 	{		
 		try {
-			SettlementBatchService.getSettlementBatchInstance().removeFromPayouts( command );
+			service.removeFromPayouts( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Payouts", exc );
@@ -282,7 +286,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
 	@PutMapping("/addToTransactions")
 	public void addToTransactions( @RequestBody(required=true) AssignTransactionsToSettlementBatchCommand command ) {
 		try {
-			SettlementBatchService.getSettlementBatchInstance().addToTransactions( command );   
+			service.addToTransactions( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Transactions", exc );
@@ -297,7 +301,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
 	public void removeFromTransactions( 	@RequestBody(required=true) RemoveTransactionsFromSettlementBatchCommand command )
 	{		
 		try {
-			SettlementBatchService.getSettlementBatchInstance().removeFromTransactions( command );
+			service.removeFromTransactions( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Transactions", exc );
@@ -311,6 +315,7 @@ public class SettlementBatchRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected SettlementBatch settlementBatch = null;
-    private static final Logger LOGGER = Logger.getLogger(SettlementBatchRestController.class.getName());
+	protected SettlementBatchService service = null;
+	private static final Logger LOGGER = Logger.getLogger(SettlementBatchRestController.class.getName());
     
 }

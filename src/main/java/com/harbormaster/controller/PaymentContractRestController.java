@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/PaymentContract")
 public class PaymentContractRestController extends BaseSpringRestController {
 
+	public PaymentContractRestController( PaymentContractService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a PaymentContract.  if not key provided, calls create, otherwise calls save
      * @param		PaymentContract	paymentContract
@@ -94,7 +98,7 @@ public class PaymentContractRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = PaymentContractService.getPaymentContractInstance().createPaymentContract( command );
+			completableFuture = service.createPaymentContract( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class PaymentContractRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdatePaymentContractCommand
 			// -----------------------------------------------
-			completableFuture = PaymentContractService.getPaymentContractInstance().updatePaymentContract(command);;
+			completableFuture = service.updatePaymentContract(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "PaymentContractController:update() - successfully update PaymentContract - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class PaymentContractRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeletePaymentContractCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	PaymentContractService delegate = PaymentContractService.getPaymentContractInstance();
+        	PaymentContractService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted PaymentContract with key " + command.getPaymentContractId() );
@@ -155,7 +159,7 @@ public class PaymentContractRestController extends BaseSpringRestController {
     	PaymentContract entity = null;
 
     	try {  
-    		entity = PaymentContractService.getPaymentContractInstance().getPaymentContract( new PaymentContractFetchOneSummary( uuid ) );   
+    		entity = service.getPaymentContract( new PaymentContractFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load PaymentContract using Id " + uuid );
@@ -175,7 +179,7 @@ public class PaymentContractRestController extends BaseSpringRestController {
         
     	try {
             // load the PaymentContract
-            paymentContractList = PaymentContractService.getPaymentContractInstance().getAllPaymentContract();
+            paymentContractList = service.getAllPaymentContract();
             
             if ( paymentContractList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all PaymentContracts" );
@@ -196,7 +200,7 @@ public class PaymentContractRestController extends BaseSpringRestController {
 	@PutMapping("/assignMerchant")
 	public void assignMerchant( @RequestBody AssignMerchantToPaymentContractCommand command ) {
 		try {
-			PaymentContractService.getPaymentContractInstance().assignMerchant( command );   
+			service.assignMerchant( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Merchant", exc );
@@ -210,7 +214,7 @@ public class PaymentContractRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignMerchant")
 	public void unAssignMerchant( @RequestBody(required=true)  UnAssignMerchantFromPaymentContractCommand command ) {
 		try {
-			PaymentContractService.getPaymentContractInstance().unAssignMerchant( command );   
+			service.unAssignMerchant( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Merchant", exc );
@@ -224,7 +228,7 @@ public class PaymentContractRestController extends BaseSpringRestController {
 	@PutMapping("/assignAcquirer")
 	public void assignAcquirer( @RequestBody AssignAcquirerToPaymentContractCommand command ) {
 		try {
-			PaymentContractService.getPaymentContractInstance().assignAcquirer( command );   
+			service.assignAcquirer( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Acquirer", exc );
@@ -238,7 +242,7 @@ public class PaymentContractRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignAcquirer")
 	public void unAssignAcquirer( @RequestBody(required=true)  UnAssignAcquirerFromPaymentContractCommand command ) {
 		try {
-			PaymentContractService.getPaymentContractInstance().unAssignAcquirer( command );   
+			service.unAssignAcquirer( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Acquirer", exc );
@@ -253,6 +257,7 @@ public class PaymentContractRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected PaymentContract paymentContract = null;
-    private static final Logger LOGGER = Logger.getLogger(PaymentContractRestController.class.getName());
+	protected PaymentContractService service = null;
+	private static final Logger LOGGER = Logger.getLogger(PaymentContractRestController.class.getName());
     
 }

@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Terminal")
 public class TerminalRestController extends BaseSpringRestController {
 
+	public TerminalRestController( TerminalService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Terminal.  if not key provided, calls create, otherwise calls save
      * @param		Terminal	terminal
@@ -94,7 +98,7 @@ public class TerminalRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = TerminalService.getTerminalInstance().createTerminal( command );
+			completableFuture = service.createTerminal( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class TerminalRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateTerminalCommand
 			// -----------------------------------------------
-			completableFuture = TerminalService.getTerminalInstance().updateTerminal(command);;
+			completableFuture = service.updateTerminal(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "TerminalController:update() - successfully update Terminal - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class TerminalRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteTerminalCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	TerminalService delegate = TerminalService.getTerminalInstance();
+        	TerminalService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Terminal with key " + command.getTerminalId() );
@@ -155,7 +159,7 @@ public class TerminalRestController extends BaseSpringRestController {
     	Terminal entity = null;
 
     	try {  
-    		entity = TerminalService.getTerminalInstance().getTerminal( new TerminalFetchOneSummary( uuid ) );   
+    		entity = service.getTerminal( new TerminalFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Terminal using Id " + uuid );
@@ -175,7 +179,7 @@ public class TerminalRestController extends BaseSpringRestController {
         
     	try {
             // load the Terminal
-            terminalList = TerminalService.getTerminalInstance().getAllTerminal();
+            terminalList = service.getAllTerminal();
             
             if ( terminalList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Terminals" );
@@ -196,7 +200,7 @@ public class TerminalRestController extends BaseSpringRestController {
 	@PutMapping("/assignMerchant")
 	public void assignMerchant( @RequestBody AssignMerchantToTerminalCommand command ) {
 		try {
-			TerminalService.getTerminalInstance().assignMerchant( command );   
+			service.assignMerchant( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Merchant", exc );
@@ -210,7 +214,7 @@ public class TerminalRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignMerchant")
 	public void unAssignMerchant( @RequestBody(required=true)  UnAssignMerchantFromTerminalCommand command ) {
 		try {
-			TerminalService.getTerminalInstance().unAssignMerchant( command );   
+			service.unAssignMerchant( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Merchant", exc );
@@ -225,6 +229,7 @@ public class TerminalRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Terminal terminal = null;
-    private static final Logger LOGGER = Logger.getLogger(TerminalRestController.class.getName());
+	protected TerminalService service = null;
+	private static final Logger LOGGER = Logger.getLogger(TerminalRestController.class.getName());
     
 }

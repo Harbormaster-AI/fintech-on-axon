@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/FXQuote")
 public class FXQuoteRestController extends BaseSpringRestController {
 
+	public FXQuoteRestController( FXQuoteService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a FXQuote.  if not key provided, calls create, otherwise calls save
      * @param		FXQuote	fXQuote
@@ -94,7 +98,7 @@ public class FXQuoteRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = FXQuoteService.getFXQuoteInstance().createFXQuote( command );
+			completableFuture = service.createFXQuote( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class FXQuoteRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateFXQuoteCommand
 			// -----------------------------------------------
-			completableFuture = FXQuoteService.getFXQuoteInstance().updateFXQuote(command);;
+			completableFuture = service.updateFXQuote(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "FXQuoteController:update() - successfully update FXQuote - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class FXQuoteRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteFXQuoteCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	FXQuoteService delegate = FXQuoteService.getFXQuoteInstance();
+        	FXQuoteService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted FXQuote with key " + command.getFXQuoteId() );
@@ -155,7 +159,7 @@ public class FXQuoteRestController extends BaseSpringRestController {
     	FXQuote entity = null;
 
     	try {  
-    		entity = FXQuoteService.getFXQuoteInstance().getFXQuote( new FXQuoteFetchOneSummary( uuid ) );   
+    		entity = service.getFXQuote( new FXQuoteFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load FXQuote using Id " + uuid );
@@ -175,7 +179,7 @@ public class FXQuoteRestController extends BaseSpringRestController {
         
     	try {
             // load the FXQuote
-            fXQuoteList = FXQuoteService.getFXQuoteInstance().getAllFXQuote();
+            fXQuoteList = service.getAllFXQuote();
             
             if ( fXQuoteList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all FXQuotes" );
@@ -196,7 +200,7 @@ public class FXQuoteRestController extends BaseSpringRestController {
 	@PutMapping("/assignRequestedBy")
 	public void assignRequestedBy( @RequestBody AssignRequestedByToFXQuoteCommand command ) {
 		try {
-			FXQuoteService.getFXQuoteInstance().assignRequestedBy( command );   
+			service.assignRequestedBy( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign RequestedBy", exc );
@@ -210,7 +214,7 @@ public class FXQuoteRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignRequestedBy")
 	public void unAssignRequestedBy( @RequestBody(required=true)  UnAssignRequestedByFromFXQuoteCommand command ) {
 		try {
-			FXQuoteService.getFXQuoteInstance().unAssignRequestedBy( command );   
+			service.unAssignRequestedBy( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign RequestedBy", exc );
@@ -225,6 +229,7 @@ public class FXQuoteRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected FXQuote fXQuote = null;
-    private static final Logger LOGGER = Logger.getLogger(FXQuoteRestController.class.getName());
+	protected FXQuoteService service = null;
+	private static final Logger LOGGER = Logger.getLogger(FXQuoteRestController.class.getName());
     
 }

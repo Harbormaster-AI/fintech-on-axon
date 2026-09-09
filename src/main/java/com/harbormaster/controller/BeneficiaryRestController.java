@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Beneficiary")
 public class BeneficiaryRestController extends BaseSpringRestController {
 
+	public BeneficiaryRestController( BeneficiaryService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Beneficiary.  if not key provided, calls create, otherwise calls save
      * @param		Beneficiary	beneficiary
@@ -94,7 +98,7 @@ public class BeneficiaryRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = BeneficiaryService.getBeneficiaryInstance().createBeneficiary( command );
+			completableFuture = service.createBeneficiary( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class BeneficiaryRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateBeneficiaryCommand
 			// -----------------------------------------------
-			completableFuture = BeneficiaryService.getBeneficiaryInstance().updateBeneficiary(command);;
+			completableFuture = service.updateBeneficiary(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "BeneficiaryController:update() - successfully update Beneficiary - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class BeneficiaryRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteBeneficiaryCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	BeneficiaryService delegate = BeneficiaryService.getBeneficiaryInstance();
+        	BeneficiaryService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Beneficiary with key " + command.getBeneficiaryId() );
@@ -155,7 +159,7 @@ public class BeneficiaryRestController extends BaseSpringRestController {
     	Beneficiary entity = null;
 
     	try {  
-    		entity = BeneficiaryService.getBeneficiaryInstance().getBeneficiary( new BeneficiaryFetchOneSummary( uuid ) );   
+    		entity = service.getBeneficiary( new BeneficiaryFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Beneficiary using Id " + uuid );
@@ -175,7 +179,7 @@ public class BeneficiaryRestController extends BaseSpringRestController {
         
     	try {
             // load the Beneficiary
-            beneficiaryList = BeneficiaryService.getBeneficiaryInstance().getAllBeneficiary();
+            beneficiaryList = service.getAllBeneficiary();
             
             if ( beneficiaryList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Beneficiarys" );
@@ -196,7 +200,7 @@ public class BeneficiaryRestController extends BaseSpringRestController {
 	@PutMapping("/assignCustomer")
 	public void assignCustomer( @RequestBody AssignCustomerToBeneficiaryCommand command ) {
 		try {
-			BeneficiaryService.getBeneficiaryInstance().assignCustomer( command );   
+			service.assignCustomer( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Customer", exc );
@@ -210,7 +214,7 @@ public class BeneficiaryRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignCustomer")
 	public void unAssignCustomer( @RequestBody(required=true)  UnAssignCustomerFromBeneficiaryCommand command ) {
 		try {
-			BeneficiaryService.getBeneficiaryInstance().unAssignCustomer( command );   
+			service.unAssignCustomer( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Customer", exc );
@@ -225,6 +229,7 @@ public class BeneficiaryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Beneficiary beneficiary = null;
-    private static final Logger LOGGER = Logger.getLogger(BeneficiaryRestController.class.getName());
+	protected BeneficiaryService service = null;
+	private static final Logger LOGGER = Logger.getLogger(BeneficiaryRestController.class.getName());
     
 }

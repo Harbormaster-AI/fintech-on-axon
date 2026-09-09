@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/PricingPlan")
 public class PricingPlanRestController extends BaseSpringRestController {
 
+	public PricingPlanRestController( PricingPlanService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a PricingPlan.  if not key provided, calls create, otherwise calls save
      * @param		PricingPlan	pricingPlan
@@ -94,7 +98,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = PricingPlanService.getPricingPlanInstance().createPricingPlan( command );
+			completableFuture = service.createPricingPlan( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdatePricingPlanCommand
 			// -----------------------------------------------
-			completableFuture = PricingPlanService.getPricingPlanInstance().updatePricingPlan(command);;
+			completableFuture = service.updatePricingPlan(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "PricingPlanController:update() - successfully update PricingPlan - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeletePricingPlanCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	PricingPlanService delegate = PricingPlanService.getPricingPlanInstance();
+        	PricingPlanService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted PricingPlan with key " + command.getPricingPlanId() );
@@ -155,7 +159,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
     	PricingPlan entity = null;
 
     	try {  
-    		entity = PricingPlanService.getPricingPlanInstance().getPricingPlan( new PricingPlanFetchOneSummary( uuid ) );   
+    		entity = service.getPricingPlan( new PricingPlanFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load PricingPlan using Id " + uuid );
@@ -175,7 +179,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
         
     	try {
             // load the PricingPlan
-            pricingPlanList = PricingPlanService.getPricingPlanInstance().getAllPricingPlan();
+            pricingPlanList = service.getAllPricingPlan();
             
             if ( pricingPlanList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all PricingPlans" );
@@ -196,7 +200,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
 	@PutMapping("/assignProductOffering")
 	public void assignProductOffering( @RequestBody AssignProductOfferingToPricingPlanCommand command ) {
 		try {
-			PricingPlanService.getPricingPlanInstance().assignProductOffering( command );   
+			service.assignProductOffering( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign ProductOffering", exc );
@@ -210,7 +214,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignProductOffering")
 	public void unAssignProductOffering( @RequestBody(required=true)  UnAssignProductOfferingFromPricingPlanCommand command ) {
 		try {
-			PricingPlanService.getPricingPlanInstance().unAssignProductOffering( command );   
+			service.unAssignProductOffering( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign ProductOffering", exc );
@@ -225,7 +229,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
 	@PutMapping("/addToFeeSchedules")
 	public void addToFeeSchedules( @RequestBody(required=true) AssignFeeSchedulesToPricingPlanCommand command ) {
 		try {
-			PricingPlanService.getPricingPlanInstance().addToFeeSchedules( command );   
+			service.addToFeeSchedules( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set FeeSchedules", exc );
@@ -240,7 +244,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
 	public void removeFromFeeSchedules( 	@RequestBody(required=true) RemoveFeeSchedulesFromPricingPlanCommand command )
 	{		
 		try {
-			PricingPlanService.getPricingPlanInstance().removeFromFeeSchedules( command );
+			service.removeFromFeeSchedules( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set FeeSchedules", exc );
@@ -254,7 +258,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
 	@PutMapping("/addToLimits")
 	public void addToLimits( @RequestBody(required=true) AssignLimitsToPricingPlanCommand command ) {
 		try {
-			PricingPlanService.getPricingPlanInstance().addToLimits( command );   
+			service.addToLimits( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Limits", exc );
@@ -269,7 +273,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
 	public void removeFromLimits( 	@RequestBody(required=true) RemoveLimitsFromPricingPlanCommand command )
 	{		
 		try {
-			PricingPlanService.getPricingPlanInstance().removeFromLimits( command );
+			service.removeFromLimits( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Limits", exc );
@@ -283,6 +287,7 @@ public class PricingPlanRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected PricingPlan pricingPlan = null;
-    private static final Logger LOGGER = Logger.getLogger(PricingPlanRestController.class.getName());
+	protected PricingPlanService service = null;
+	private static final Logger LOGGER = Logger.getLogger(PricingPlanRestController.class.getName());
     
 }

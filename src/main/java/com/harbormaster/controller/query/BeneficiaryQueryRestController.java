@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/BeneficiaryQuery")
 public class BeneficiaryQueryRestController extends BaseSpringRestController {
 	
+	public BeneficiaryQueryRestController( BeneficiaryService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Beneficiary using a UUID
      * @param		UUID beneficiaryId
@@ -95,7 +99,7 @@ public class BeneficiaryQueryRestController extends BaseSpringRestController {
     	Beneficiary entity = null;
 
     	try {  
-    		entity = BeneficiaryService.getBeneficiaryInstance().getBeneficiary( new BeneficiaryFetchOneSummary( beneficiaryId ) );
+    		entity = service.getBeneficiary( new BeneficiaryFetchOneSummary( beneficiaryId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Beneficiary using Id " + beneficiaryId );
@@ -115,7 +119,7 @@ public class BeneficiaryQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Beneficiary
-            beneficiaryList = BeneficiaryService.getBeneficiaryInstance().getAllBeneficiary();
+            beneficiaryList = service.getAllBeneficiary();
             
             if ( beneficiaryList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Beneficiarys" );
@@ -135,6 +139,7 @@ public class BeneficiaryQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Beneficiary beneficiary = null;
+    protected BeneficiaryService service = null;
     private static final Logger LOGGER = Logger.getLogger(BeneficiaryQueryRestController.class.getName());
     
 }

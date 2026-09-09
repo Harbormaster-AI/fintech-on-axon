@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/PayoutQuery")
 public class PayoutQueryRestController extends BaseSpringRestController {
 	
+	public PayoutQueryRestController( PayoutService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Payout using a UUID
      * @param		UUID payoutId
@@ -95,7 +99,7 @@ public class PayoutQueryRestController extends BaseSpringRestController {
     	Payout entity = null;
 
     	try {  
-    		entity = PayoutService.getPayoutInstance().getPayout( new PayoutFetchOneSummary( payoutId ) );
+    		entity = service.getPayout( new PayoutFetchOneSummary( payoutId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Payout using Id " + payoutId );
@@ -115,7 +119,7 @@ public class PayoutQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Payout
-            payoutList = PayoutService.getPayoutInstance().getAllPayout();
+            payoutList = service.getAllPayout();
             
             if ( payoutList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Payouts" );
@@ -135,6 +139,7 @@ public class PayoutQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Payout payout = null;
+    protected PayoutService service = null;
     private static final Logger LOGGER = Logger.getLogger(PayoutQueryRestController.class.getName());
     
 }

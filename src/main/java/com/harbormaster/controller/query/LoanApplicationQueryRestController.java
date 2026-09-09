@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/LoanApplicationQuery")
 public class LoanApplicationQueryRestController extends BaseSpringRestController {
 	
+	public LoanApplicationQueryRestController( LoanApplicationService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a LoanApplication using a UUID
      * @param		UUID loanApplicationId
@@ -95,7 +99,7 @@ public class LoanApplicationQueryRestController extends BaseSpringRestController
     	LoanApplication entity = null;
 
     	try {  
-    		entity = LoanApplicationService.getLoanApplicationInstance().getLoanApplication( new LoanApplicationFetchOneSummary( loanApplicationId ) );
+    		entity = service.getLoanApplication( new LoanApplicationFetchOneSummary( loanApplicationId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load LoanApplication using Id " + loanApplicationId );
@@ -115,7 +119,7 @@ public class LoanApplicationQueryRestController extends BaseSpringRestController
         
     	try {
             // load the LoanApplication
-            loanApplicationList = LoanApplicationService.getLoanApplicationInstance().getAllLoanApplication();
+            loanApplicationList = service.getAllLoanApplication();
             
             if ( loanApplicationList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all LoanApplications" );
@@ -135,6 +139,7 @@ public class LoanApplicationQueryRestController extends BaseSpringRestController
 // Attributes
 //************************************************************************
     protected LoanApplication loanApplication = null;
+    protected LoanApplicationService service = null;
     private static final Logger LOGGER = Logger.getLogger(LoanApplicationQueryRestController.class.getName());
     
 }

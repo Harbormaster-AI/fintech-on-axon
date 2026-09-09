@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/FeeSchedule")
 public class FeeScheduleRestController extends BaseSpringRestController {
 
+	public FeeScheduleRestController( FeeScheduleService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a FeeSchedule.  if not key provided, calls create, otherwise calls save
      * @param		FeeSchedule	feeSchedule
@@ -94,7 +98,7 @@ public class FeeScheduleRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = FeeScheduleService.getFeeScheduleInstance().createFeeSchedule( command );
+			completableFuture = service.createFeeSchedule( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class FeeScheduleRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateFeeScheduleCommand
 			// -----------------------------------------------
-			completableFuture = FeeScheduleService.getFeeScheduleInstance().updateFeeSchedule(command);;
+			completableFuture = service.updateFeeSchedule(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "FeeScheduleController:update() - successfully update FeeSchedule - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class FeeScheduleRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteFeeScheduleCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	FeeScheduleService delegate = FeeScheduleService.getFeeScheduleInstance();
+        	FeeScheduleService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted FeeSchedule with key " + command.getFeeScheduleId() );
@@ -155,7 +159,7 @@ public class FeeScheduleRestController extends BaseSpringRestController {
     	FeeSchedule entity = null;
 
     	try {  
-    		entity = FeeScheduleService.getFeeScheduleInstance().getFeeSchedule( new FeeScheduleFetchOneSummary( uuid ) );   
+    		entity = service.getFeeSchedule( new FeeScheduleFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load FeeSchedule using Id " + uuid );
@@ -175,7 +179,7 @@ public class FeeScheduleRestController extends BaseSpringRestController {
         
     	try {
             // load the FeeSchedule
-            feeScheduleList = FeeScheduleService.getFeeScheduleInstance().getAllFeeSchedule();
+            feeScheduleList = service.getAllFeeSchedule();
             
             if ( feeScheduleList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all FeeSchedules" );
@@ -196,7 +200,7 @@ public class FeeScheduleRestController extends BaseSpringRestController {
 	@PutMapping("/assignPricingPlan")
 	public void assignPricingPlan( @RequestBody AssignPricingPlanToFeeScheduleCommand command ) {
 		try {
-			FeeScheduleService.getFeeScheduleInstance().assignPricingPlan( command );   
+			service.assignPricingPlan( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign PricingPlan", exc );
@@ -210,7 +214,7 @@ public class FeeScheduleRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignPricingPlan")
 	public void unAssignPricingPlan( @RequestBody(required=true)  UnAssignPricingPlanFromFeeScheduleCommand command ) {
 		try {
-			FeeScheduleService.getFeeScheduleInstance().unAssignPricingPlan( command );   
+			service.unAssignPricingPlan( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign PricingPlan", exc );
@@ -225,6 +229,7 @@ public class FeeScheduleRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected FeeSchedule feeSchedule = null;
-    private static final Logger LOGGER = Logger.getLogger(FeeScheduleRestController.class.getName());
+	protected FeeScheduleService service = null;
+	private static final Logger LOGGER = Logger.getLogger(FeeScheduleRestController.class.getName());
     
 }

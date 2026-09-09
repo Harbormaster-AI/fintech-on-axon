@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/KYCProfileQuery")
 public class KYCProfileQueryRestController extends BaseSpringRestController {
 	
+	public KYCProfileQueryRestController( KYCProfileService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a KYCProfile using a UUID
      * @param		UUID kYCProfileId
@@ -95,7 +99,7 @@ public class KYCProfileQueryRestController extends BaseSpringRestController {
     	KYCProfile entity = null;
 
     	try {  
-    		entity = KYCProfileService.getKYCProfileInstance().getKYCProfile( new KYCProfileFetchOneSummary( kYCProfileId ) );
+    		entity = service.getKYCProfile( new KYCProfileFetchOneSummary( kYCProfileId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load KYCProfile using Id " + kYCProfileId );
@@ -115,7 +119,7 @@ public class KYCProfileQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the KYCProfile
-            kYCProfileList = KYCProfileService.getKYCProfileInstance().getAllKYCProfile();
+            kYCProfileList = service.getAllKYCProfile();
             
             if ( kYCProfileList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all KYCProfiles" );
@@ -135,6 +139,7 @@ public class KYCProfileQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected KYCProfile kYCProfile = null;
+    protected KYCProfileService service = null;
     private static final Logger LOGGER = Logger.getLogger(KYCProfileQueryRestController.class.getName());
     
 }

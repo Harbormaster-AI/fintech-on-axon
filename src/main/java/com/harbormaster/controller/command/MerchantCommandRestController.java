@@ -100,7 +100,6 @@ public class MerchantCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateMerchantCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createMerchant( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class MerchantCommandRestController extends BaseSpringRestController {
 		DeleteMerchantCommand command = new DeleteMerchantCommand( merchantId );
 
     	try {
-        	MerchantService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Merchant with key " + command.getMerchantId() );
         }
         catch( Throwable exc ) {

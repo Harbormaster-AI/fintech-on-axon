@@ -100,7 +100,6 @@ public class FinancialInstitutionCommandRestController extends BaseSpringRestCon
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateFinancialInstitutionCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createFinancialInstitution( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class FinancialInstitutionCommandRestController extends BaseSpringRestCon
 		DeleteFinancialInstitutionCommand command = new DeleteFinancialInstitutionCommand( financialInstitutionId );
 
     	try {
-        	FinancialInstitutionService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted FinancialInstitution with key " + command.getFinancialInstitutionId() );
         }
         catch( Throwable exc ) {

@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateUsageLimitEvent</li>
  *      <li>DeleteUsageLimitEvent</li>
    *       <li>AssignPricingPlanToUsageLimitEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignPricingPlanFromUsageLimitEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>
@@ -182,7 +182,7 @@ public class UsageLimitAggregate {
     
     private String name;
     private Money amount;
-    private Integer count;
+    private int count;
     private LimitScope scope;
     private LimitPeriod period;
     private PricingPlan pricingPlan = null;

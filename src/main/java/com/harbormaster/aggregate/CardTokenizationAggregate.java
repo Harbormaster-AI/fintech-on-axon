@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateCardTokenizationEvent</li>
  *      <li>DeleteCardTokenizationEvent</li>
    *       <li>AssignCardToCardTokenizationEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCardFromCardTokenizationEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

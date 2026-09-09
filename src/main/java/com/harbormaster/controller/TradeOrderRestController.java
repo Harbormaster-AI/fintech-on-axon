@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/TradeOrder")
 public class TradeOrderRestController extends BaseSpringRestController {
 
+	public TradeOrderRestController( TradeOrderService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a TradeOrder.  if not key provided, calls create, otherwise calls save
      * @param		TradeOrder	tradeOrder
@@ -94,7 +98,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = TradeOrderService.getTradeOrderInstance().createTradeOrder( command );
+			completableFuture = service.createTradeOrder( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateTradeOrderCommand
 			// -----------------------------------------------
-			completableFuture = TradeOrderService.getTradeOrderInstance().updateTradeOrder(command);;
+			completableFuture = service.updateTradeOrder(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "TradeOrderController:update() - successfully update TradeOrder - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteTradeOrderCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	TradeOrderService delegate = TradeOrderService.getTradeOrderInstance();
+        	TradeOrderService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted TradeOrder with key " + command.getTradeOrderId() );
@@ -155,7 +159,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
     	TradeOrder entity = null;
 
     	try {  
-    		entity = TradeOrderService.getTradeOrderInstance().getTradeOrder( new TradeOrderFetchOneSummary( uuid ) );   
+    		entity = service.getTradeOrder( new TradeOrderFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load TradeOrder using Id " + uuid );
@@ -175,7 +179,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
         
     	try {
             // load the TradeOrder
-            tradeOrderList = TradeOrderService.getTradeOrderInstance().getAllTradeOrder();
+            tradeOrderList = service.getAllTradeOrder();
             
             if ( tradeOrderList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all TradeOrders" );
@@ -196,7 +200,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
 	@PutMapping("/assignPortfolio")
 	public void assignPortfolio( @RequestBody AssignPortfolioToTradeOrderCommand command ) {
 		try {
-			TradeOrderService.getTradeOrderInstance().assignPortfolio( command );   
+			service.assignPortfolio( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Portfolio", exc );
@@ -210,7 +214,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignPortfolio")
 	public void unAssignPortfolio( @RequestBody(required=true)  UnAssignPortfolioFromTradeOrderCommand command ) {
 		try {
-			TradeOrderService.getTradeOrderInstance().unAssignPortfolio( command );   
+			service.unAssignPortfolio( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Portfolio", exc );
@@ -224,7 +228,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
 	@PutMapping("/assignSecurity")
 	public void assignSecurity( @RequestBody AssignSecurityToTradeOrderCommand command ) {
 		try {
-			TradeOrderService.getTradeOrderInstance().assignSecurity( command );   
+			service.assignSecurity( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Security", exc );
@@ -238,7 +242,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignSecurity")
 	public void unAssignSecurity( @RequestBody(required=true)  UnAssignSecurityFromTradeOrderCommand command ) {
 		try {
-			TradeOrderService.getTradeOrderInstance().unAssignSecurity( command );   
+			service.unAssignSecurity( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Security", exc );
@@ -253,7 +257,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
 	@PutMapping("/addToTrades")
 	public void addToTrades( @RequestBody(required=true) AssignTradesToTradeOrderCommand command ) {
 		try {
-			TradeOrderService.getTradeOrderInstance().addToTrades( command );   
+			service.addToTrades( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Trades", exc );
@@ -268,7 +272,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
 	public void removeFromTrades( 	@RequestBody(required=true) RemoveTradesFromTradeOrderCommand command )
 	{		
 		try {
-			TradeOrderService.getTradeOrderInstance().removeFromTrades( command );
+			service.removeFromTrades( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Trades", exc );
@@ -282,6 +286,7 @@ public class TradeOrderRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected TradeOrder tradeOrder = null;
-    private static final Logger LOGGER = Logger.getLogger(TradeOrderRestController.class.getName());
+	protected TradeOrderService service = null;
+	private static final Logger LOGGER = Logger.getLogger(TradeOrderRestController.class.getName());
     
 }

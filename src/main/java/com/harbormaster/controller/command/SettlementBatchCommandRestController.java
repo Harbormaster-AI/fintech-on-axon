@@ -100,7 +100,6 @@ public class SettlementBatchCommandRestController extends BaseSpringRestControll
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateSettlementBatchCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createSettlementBatch( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class SettlementBatchCommandRestController extends BaseSpringRestControll
 		DeleteSettlementBatchCommand command = new DeleteSettlementBatchCommand( settlementBatchId );
 
     	try {
-        	SettlementBatchService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted SettlementBatch with key " + command.getSettlementBatchId() );
         }
         catch( Throwable exc ) {

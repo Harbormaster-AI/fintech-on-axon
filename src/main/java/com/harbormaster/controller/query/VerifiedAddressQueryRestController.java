@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/VerifiedAddressQuery")
 public class VerifiedAddressQueryRestController extends BaseSpringRestController {
 	
+	public VerifiedAddressQueryRestController( VerifiedAddressService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a VerifiedAddress using a UUID
      * @param		UUID verifiedAddressId
@@ -95,7 +99,7 @@ public class VerifiedAddressQueryRestController extends BaseSpringRestController
     	VerifiedAddress entity = null;
 
     	try {  
-    		entity = VerifiedAddressService.getVerifiedAddressInstance().getVerifiedAddress( new VerifiedAddressFetchOneSummary( verifiedAddressId ) );
+    		entity = service.getVerifiedAddress( new VerifiedAddressFetchOneSummary( verifiedAddressId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load VerifiedAddress using Id " + verifiedAddressId );
@@ -115,7 +119,7 @@ public class VerifiedAddressQueryRestController extends BaseSpringRestController
         
     	try {
             // load the VerifiedAddress
-            verifiedAddressList = VerifiedAddressService.getVerifiedAddressInstance().getAllVerifiedAddress();
+            verifiedAddressList = service.getAllVerifiedAddress();
             
             if ( verifiedAddressList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all VerifiedAddresss" );
@@ -135,6 +139,7 @@ public class VerifiedAddressQueryRestController extends BaseSpringRestController
 // Attributes
 //************************************************************************
     protected VerifiedAddress verifiedAddress = null;
+    protected VerifiedAddressService service = null;
     private static final Logger LOGGER = Logger.getLogger(VerifiedAddressQueryRestController.class.getName());
     
 }

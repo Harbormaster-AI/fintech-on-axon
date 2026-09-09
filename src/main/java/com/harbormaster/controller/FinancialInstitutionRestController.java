@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/FinancialInstitution")
 public class FinancialInstitutionRestController extends BaseSpringRestController {
 
+	public FinancialInstitutionRestController( FinancialInstitutionService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a FinancialInstitution.  if not key provided, calls create, otherwise calls save
      * @param		FinancialInstitution	financialInstitution
@@ -94,7 +98,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = FinancialInstitutionService.getFinancialInstitutionInstance().createFinancialInstitution( command );
+			completableFuture = service.createFinancialInstitution( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 			// -----------------------------------------------
 			// delegate the UpdateFinancialInstitutionCommand
 			// -----------------------------------------------
-			completableFuture = FinancialInstitutionService.getFinancialInstitutionInstance().updateFinancialInstitution(command);;
+			completableFuture = service.updateFinancialInstitution(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "FinancialInstitutionController:update() - successfully update FinancialInstitution - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteFinancialInstitutionCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	FinancialInstitutionService delegate = FinancialInstitutionService.getFinancialInstitutionInstance();
+        	FinancialInstitutionService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted FinancialInstitution with key " + command.getFinancialInstitutionId() );
@@ -155,7 +159,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
     	FinancialInstitution entity = null;
 
     	try {  
-    		entity = FinancialInstitutionService.getFinancialInstitutionInstance().getFinancialInstitution( new FinancialInstitutionFetchOneSummary( uuid ) );   
+    		entity = service.getFinancialInstitution( new FinancialInstitutionFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load FinancialInstitution using Id " + uuid );
@@ -175,7 +179,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
         
     	try {
             // load the FinancialInstitution
-            financialInstitutionList = FinancialInstitutionService.getFinancialInstitutionInstance().getAllFinancialInstitution();
+            financialInstitutionList = service.getAllFinancialInstitution();
             
             if ( financialInstitutionList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all FinancialInstitutions" );
@@ -197,7 +201,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 	@PutMapping("/addToBranches")
 	public void addToBranches( @RequestBody(required=true) AssignBranchesToFinancialInstitutionCommand command ) {
 		try {
-			FinancialInstitutionService.getFinancialInstitutionInstance().addToBranches( command );   
+			service.addToBranches( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Branches", exc );
@@ -212,7 +216,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 	public void removeFromBranches( 	@RequestBody(required=true) RemoveBranchesFromFinancialInstitutionCommand command )
 	{		
 		try {
-			FinancialInstitutionService.getFinancialInstitutionInstance().removeFromBranches( command );
+			service.removeFromBranches( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Branches", exc );
@@ -226,7 +230,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 	@PutMapping("/addToCustomers")
 	public void addToCustomers( @RequestBody(required=true) AssignCustomersToFinancialInstitutionCommand command ) {
 		try {
-			FinancialInstitutionService.getFinancialInstitutionInstance().addToCustomers( command );   
+			service.addToCustomers( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Customers", exc );
@@ -241,7 +245,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 	public void removeFromCustomers( 	@RequestBody(required=true) RemoveCustomersFromFinancialInstitutionCommand command )
 	{		
 		try {
-			FinancialInstitutionService.getFinancialInstitutionInstance().removeFromCustomers( command );
+			service.removeFromCustomers( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Customers", exc );
@@ -255,7 +259,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 	@PutMapping("/addToProductOfferings")
 	public void addToProductOfferings( @RequestBody(required=true) AssignProductOfferingsToFinancialInstitutionCommand command ) {
 		try {
-			FinancialInstitutionService.getFinancialInstitutionInstance().addToProductOfferings( command );   
+			service.addToProductOfferings( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set ProductOfferings", exc );
@@ -270,7 +274,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 	public void removeFromProductOfferings( 	@RequestBody(required=true) RemoveProductOfferingsFromFinancialInstitutionCommand command )
 	{		
 		try {
-			FinancialInstitutionService.getFinancialInstitutionInstance().removeFromProductOfferings( command );
+			service.removeFromProductOfferings( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set ProductOfferings", exc );
@@ -284,7 +288,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 	@PutMapping("/addToPaymentProcessors")
 	public void addToPaymentProcessors( @RequestBody(required=true) AssignPaymentProcessorsToFinancialInstitutionCommand command ) {
 		try {
-			FinancialInstitutionService.getFinancialInstitutionInstance().addToPaymentProcessors( command );   
+			service.addToPaymentProcessors( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set PaymentProcessors", exc );
@@ -299,7 +303,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 	public void removeFromPaymentProcessors( 	@RequestBody(required=true) RemovePaymentProcessorsFromFinancialInstitutionCommand command )
 	{		
 		try {
-			FinancialInstitutionService.getFinancialInstitutionInstance().removeFromPaymentProcessors( command );
+			service.removeFromPaymentProcessors( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set PaymentProcessors", exc );
@@ -313,7 +317,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 	@PutMapping("/addToCompliancePolicies")
 	public void addToCompliancePolicies( @RequestBody(required=true) AssignCompliancePoliciesToFinancialInstitutionCommand command ) {
 		try {
-			FinancialInstitutionService.getFinancialInstitutionInstance().addToCompliancePolicies( command );   
+			service.addToCompliancePolicies( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set CompliancePolicies", exc );
@@ -328,7 +332,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 	public void removeFromCompliancePolicies( 	@RequestBody(required=true) RemoveCompliancePoliciesFromFinancialInstitutionCommand command )
 	{		
 		try {
-			FinancialInstitutionService.getFinancialInstitutionInstance().removeFromCompliancePolicies( command );
+			service.removeFromCompliancePolicies( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set CompliancePolicies", exc );
@@ -342,6 +346,7 @@ public class FinancialInstitutionRestController extends BaseSpringRestController
 // Attributes
 //************************************************************************
     protected FinancialInstitution financialInstitution = null;
-    private static final Logger LOGGER = Logger.getLogger(FinancialInstitutionRestController.class.getName());
+	protected FinancialInstitutionService service = null;
+	private static final Logger LOGGER = Logger.getLogger(FinancialInstitutionRestController.class.getName());
     
 }

@@ -67,9 +67,9 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateAgreementEvent</li>
  *      <li>DeleteAgreementEvent</li>
    *       <li>AssignCustomerToAgreementEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCustomerFromAgreementEvent</li>
   *       <li>AssignProductOfferingToAgreementEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignProductOfferingFromAgreementEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>
@@ -215,7 +215,7 @@ public class AgreementAggregate {
     private UUID agreementId;
     
     private String agreementNumber;
-    private Date effectiveDate;
+    private  Date effectiveDate;
     private AgreementType agreementType;
     private AgreementStatus status;
     private Customer customer = null;

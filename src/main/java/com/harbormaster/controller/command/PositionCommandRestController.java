@@ -100,7 +100,6 @@ public class PositionCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreatePositionCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createPosition( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class PositionCommandRestController extends BaseSpringRestController {
 		DeletePositionCommand command = new DeletePositionCommand( positionId );
 
     	try {
-        	PositionService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Position with key " + command.getPositionId() );
         }
         catch( Throwable exc ) {

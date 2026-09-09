@@ -100,7 +100,6 @@ public class BeneficiaryCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateBeneficiaryCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createBeneficiary( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class BeneficiaryCommandRestController extends BaseSpringRestController {
 		DeleteBeneficiaryCommand command = new DeleteBeneficiaryCommand( beneficiaryId );
 
     	try {
-        	BeneficiaryService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Beneficiary with key " + command.getBeneficiaryId() );
         }
         catch( Throwable exc ) {

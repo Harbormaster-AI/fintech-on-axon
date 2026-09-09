@@ -69,11 +69,11 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateLoanApplicationEvent</li>
  *      <li>DeleteLoanApplicationEvent</li>
    *       <li>AssignCustomerToLoanApplicationEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCustomerFromLoanApplicationEvent</li>
   *       <li>AssignRiskAssessmentToLoanApplicationEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignRiskAssessmentFromLoanApplicationEvent</li>
   *       <li>AssignLoanToLoanApplicationEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignLoanFromLoanApplicationEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>
@@ -258,7 +258,7 @@ public class LoanApplicationAggregate {
     
     private String applicationNumber;
     private Money amountRequested;
-    private Integer termMonths;
+    private int termMonths;
     private DateTime submittedAt;
     private LoanProductType product;
     private LoanPurpose purpose;

@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/PaymentProcessor")
 public class PaymentProcessorRestController extends BaseSpringRestController {
 
+	public PaymentProcessorRestController( PaymentProcessorService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a PaymentProcessor.  if not key provided, calls create, otherwise calls save
      * @param		PaymentProcessor	paymentProcessor
@@ -94,7 +98,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = PaymentProcessorService.getPaymentProcessorInstance().createPaymentProcessor( command );
+			completableFuture = service.createPaymentProcessor( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdatePaymentProcessorCommand
 			// -----------------------------------------------
-			completableFuture = PaymentProcessorService.getPaymentProcessorInstance().updatePaymentProcessor(command);;
+			completableFuture = service.updatePaymentProcessor(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "PaymentProcessorController:update() - successfully update PaymentProcessor - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeletePaymentProcessorCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	PaymentProcessorService delegate = PaymentProcessorService.getPaymentProcessorInstance();
+        	PaymentProcessorService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted PaymentProcessor with key " + command.getPaymentProcessorId() );
@@ -155,7 +159,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
     	PaymentProcessor entity = null;
 
     	try {  
-    		entity = PaymentProcessorService.getPaymentProcessorInstance().getPaymentProcessor( new PaymentProcessorFetchOneSummary( uuid ) );   
+    		entity = service.getPaymentProcessor( new PaymentProcessorFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load PaymentProcessor using Id " + uuid );
@@ -175,7 +179,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
         
     	try {
             // load the PaymentProcessor
-            paymentProcessorList = PaymentProcessorService.getPaymentProcessorInstance().getAllPaymentProcessor();
+            paymentProcessorList = service.getAllPaymentProcessor();
             
             if ( paymentProcessorList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all PaymentProcessors" );
@@ -197,7 +201,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
 	@PutMapping("/addToInstitutions")
 	public void addToInstitutions( @RequestBody(required=true) AssignInstitutionsToPaymentProcessorCommand command ) {
 		try {
-			PaymentProcessorService.getPaymentProcessorInstance().addToInstitutions( command );   
+			service.addToInstitutions( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Institutions", exc );
@@ -212,7 +216,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
 	public void removeFromInstitutions( 	@RequestBody(required=true) RemoveInstitutionsFromPaymentProcessorCommand command )
 	{		
 		try {
-			PaymentProcessorService.getPaymentProcessorInstance().removeFromInstitutions( command );
+			service.removeFromInstitutions( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Institutions", exc );
@@ -226,7 +230,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
 	@PutMapping("/addToContracts")
 	public void addToContracts( @RequestBody(required=true) AssignContractsToPaymentProcessorCommand command ) {
 		try {
-			PaymentProcessorService.getPaymentProcessorInstance().addToContracts( command );   
+			service.addToContracts( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Contracts", exc );
@@ -241,7 +245,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
 	public void removeFromContracts( 	@RequestBody(required=true) RemoveContractsFromPaymentProcessorCommand command )
 	{		
 		try {
-			PaymentProcessorService.getPaymentProcessorInstance().removeFromContracts( command );
+			service.removeFromContracts( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Contracts", exc );
@@ -255,7 +259,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
 	@PutMapping("/addToSettlements")
 	public void addToSettlements( @RequestBody(required=true) AssignSettlementsToPaymentProcessorCommand command ) {
 		try {
-			PaymentProcessorService.getPaymentProcessorInstance().addToSettlements( command );   
+			service.addToSettlements( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Settlements", exc );
@@ -270,7 +274,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
 	public void removeFromSettlements( 	@RequestBody(required=true) RemoveSettlementsFromPaymentProcessorCommand command )
 	{		
 		try {
-			PaymentProcessorService.getPaymentProcessorInstance().removeFromSettlements( command );
+			service.removeFromSettlements( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Settlements", exc );
@@ -284,6 +288,7 @@ public class PaymentProcessorRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected PaymentProcessor paymentProcessor = null;
-    private static final Logger LOGGER = Logger.getLogger(PaymentProcessorRestController.class.getName());
+	protected PaymentProcessorService service = null;
+	private static final Logger LOGGER = Logger.getLogger(PaymentProcessorRestController.class.getName());
     
 }

@@ -100,7 +100,6 @@ public class FXQuoteCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateFXQuoteCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createFXQuote( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class FXQuoteCommandRestController extends BaseSpringRestController {
 		DeleteFXQuoteCommand command = new DeleteFXQuoteCommand( fXQuoteId );
 
     	try {
-        	FXQuoteService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted FXQuote with key " + command.getFXQuoteId() );
         }
         catch( Throwable exc ) {

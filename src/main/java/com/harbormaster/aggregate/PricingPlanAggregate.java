@@ -79,7 +79,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdatePricingPlanEvent</li>
  *      <li>DeletePricingPlanEvent</li>
    *       <li>AssignProductOfferingToPricingPlanEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignProductOfferingFromPricingPlanEvent</li>
    *       <li>AssignFeeSchedulesToPricingPlanEvent</li>
  *       <li>RemoveFeeSchedulesFromPricingPlanEvent</li>
   *       <li>AssignLimitsToPricingPlanEvent</li>

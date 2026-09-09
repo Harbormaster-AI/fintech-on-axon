@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Chargeback")
 public class ChargebackRestController extends BaseSpringRestController {
 
+	public ChargebackRestController( ChargebackService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Chargeback.  if not key provided, calls create, otherwise calls save
      * @param		Chargeback	chargeback
@@ -94,7 +98,7 @@ public class ChargebackRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = ChargebackService.getChargebackInstance().createChargeback( command );
+			completableFuture = service.createChargeback( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class ChargebackRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateChargebackCommand
 			// -----------------------------------------------
-			completableFuture = ChargebackService.getChargebackInstance().updateChargeback(command);;
+			completableFuture = service.updateChargeback(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "ChargebackController:update() - successfully update Chargeback - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class ChargebackRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteChargebackCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	ChargebackService delegate = ChargebackService.getChargebackInstance();
+        	ChargebackService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Chargeback with key " + command.getChargebackId() );
@@ -155,7 +159,7 @@ public class ChargebackRestController extends BaseSpringRestController {
     	Chargeback entity = null;
 
     	try {  
-    		entity = ChargebackService.getChargebackInstance().getChargeback( new ChargebackFetchOneSummary( uuid ) );   
+    		entity = service.getChargeback( new ChargebackFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Chargeback using Id " + uuid );
@@ -175,7 +179,7 @@ public class ChargebackRestController extends BaseSpringRestController {
         
     	try {
             // load the Chargeback
-            chargebackList = ChargebackService.getChargebackInstance().getAllChargeback();
+            chargebackList = service.getAllChargeback();
             
             if ( chargebackList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Chargebacks" );
@@ -196,7 +200,7 @@ public class ChargebackRestController extends BaseSpringRestController {
 	@PutMapping("/assignDispute")
 	public void assignDispute( @RequestBody AssignDisputeToChargebackCommand command ) {
 		try {
-			ChargebackService.getChargebackInstance().assignDispute( command );   
+			service.assignDispute( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Dispute", exc );
@@ -210,7 +214,7 @@ public class ChargebackRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignDispute")
 	public void unAssignDispute( @RequestBody(required=true)  UnAssignDisputeFromChargebackCommand command ) {
 		try {
-			ChargebackService.getChargebackInstance().unAssignDispute( command );   
+			service.unAssignDispute( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Dispute", exc );
@@ -224,7 +228,7 @@ public class ChargebackRestController extends BaseSpringRestController {
 	@PutMapping("/assignTransaction")
 	public void assignTransaction( @RequestBody AssignTransactionToChargebackCommand command ) {
 		try {
-			ChargebackService.getChargebackInstance().assignTransaction( command );   
+			service.assignTransaction( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Transaction", exc );
@@ -238,7 +242,7 @@ public class ChargebackRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignTransaction")
 	public void unAssignTransaction( @RequestBody(required=true)  UnAssignTransactionFromChargebackCommand command ) {
 		try {
-			ChargebackService.getChargebackInstance().unAssignTransaction( command );   
+			service.unAssignTransaction( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Transaction", exc );
@@ -253,6 +257,7 @@ public class ChargebackRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Chargeback chargeback = null;
-    private static final Logger LOGGER = Logger.getLogger(ChargebackRestController.class.getName());
+	protected ChargebackService service = null;
+	private static final Logger LOGGER = Logger.getLogger(ChargebackRestController.class.getName());
     
 }

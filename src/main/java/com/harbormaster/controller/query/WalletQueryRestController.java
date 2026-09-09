@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/WalletQuery")
 public class WalletQueryRestController extends BaseSpringRestController {
 	
+	public WalletQueryRestController( WalletService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Wallet using a UUID
      * @param		UUID walletId
@@ -95,7 +99,7 @@ public class WalletQueryRestController extends BaseSpringRestController {
     	Wallet entity = null;
 
     	try {  
-    		entity = WalletService.getWalletInstance().getWallet( new WalletFetchOneSummary( walletId ) );
+    		entity = service.getWallet( new WalletFetchOneSummary( walletId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Wallet using Id " + walletId );
@@ -115,7 +119,7 @@ public class WalletQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Wallet
-            walletList = WalletService.getWalletInstance().getAllWallet();
+            walletList = service.getAllWallet();
             
             if ( walletList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Wallets" );
@@ -135,6 +139,7 @@ public class WalletQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Wallet wallet = null;
+    protected WalletService service = null;
     private static final Logger LOGGER = Logger.getLogger(WalletQueryRestController.class.getName());
     
 }

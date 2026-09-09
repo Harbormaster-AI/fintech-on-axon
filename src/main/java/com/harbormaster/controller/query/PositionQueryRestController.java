@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/PositionQuery")
 public class PositionQueryRestController extends BaseSpringRestController {
 	
+	public PositionQueryRestController( PositionService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Position using a UUID
      * @param		UUID positionId
@@ -95,7 +99,7 @@ public class PositionQueryRestController extends BaseSpringRestController {
     	Position entity = null;
 
     	try {  
-    		entity = PositionService.getPositionInstance().getPosition( new PositionFetchOneSummary( positionId ) );
+    		entity = service.getPosition( new PositionFetchOneSummary( positionId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Position using Id " + positionId );
@@ -115,7 +119,7 @@ public class PositionQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Position
-            positionList = PositionService.getPositionInstance().getAllPosition();
+            positionList = service.getAllPosition();
             
             if ( positionList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Positions" );
@@ -135,6 +139,7 @@ public class PositionQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Position position = null;
+    protected PositionService service = null;
     private static final Logger LOGGER = Logger.getLogger(PositionQueryRestController.class.getName());
     
 }

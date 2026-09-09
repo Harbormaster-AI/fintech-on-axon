@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/FXDeal")
 public class FXDealRestController extends BaseSpringRestController {
 
+	public FXDealRestController( FXDealService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a FXDeal.  if not key provided, calls create, otherwise calls save
      * @param		FXDeal	fXDeal
@@ -94,7 +98,7 @@ public class FXDealRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = FXDealService.getFXDealInstance().createFXDeal( command );
+			completableFuture = service.createFXDeal( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class FXDealRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateFXDealCommand
 			// -----------------------------------------------
-			completableFuture = FXDealService.getFXDealInstance().updateFXDeal(command);;
+			completableFuture = service.updateFXDeal(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "FXDealController:update() - successfully update FXDeal - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class FXDealRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteFXDealCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	FXDealService delegate = FXDealService.getFXDealInstance();
+        	FXDealService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted FXDeal with key " + command.getFXDealId() );
@@ -155,7 +159,7 @@ public class FXDealRestController extends BaseSpringRestController {
     	FXDeal entity = null;
 
     	try {  
-    		entity = FXDealService.getFXDealInstance().getFXDeal( new FXDealFetchOneSummary( uuid ) );   
+    		entity = service.getFXDeal( new FXDealFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load FXDeal using Id " + uuid );
@@ -175,7 +179,7 @@ public class FXDealRestController extends BaseSpringRestController {
         
     	try {
             // load the FXDeal
-            fXDealList = FXDealService.getFXDealInstance().getAllFXDeal();
+            fXDealList = service.getAllFXDeal();
             
             if ( fXDealList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all FXDeals" );
@@ -196,7 +200,7 @@ public class FXDealRestController extends BaseSpringRestController {
 	@PutMapping("/assignQuote")
 	public void assignQuote( @RequestBody AssignQuoteToFXDealCommand command ) {
 		try {
-			FXDealService.getFXDealInstance().assignQuote( command );   
+			service.assignQuote( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Quote", exc );
@@ -210,7 +214,7 @@ public class FXDealRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignQuote")
 	public void unAssignQuote( @RequestBody(required=true)  UnAssignQuoteFromFXDealCommand command ) {
 		try {
-			FXDealService.getFXDealInstance().unAssignQuote( command );   
+			service.unAssignQuote( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Quote", exc );
@@ -225,7 +229,7 @@ public class FXDealRestController extends BaseSpringRestController {
 	@PutMapping("/addToPaymentOrders")
 	public void addToPaymentOrders( @RequestBody(required=true) AssignPaymentOrdersToFXDealCommand command ) {
 		try {
-			FXDealService.getFXDealInstance().addToPaymentOrders( command );   
+			service.addToPaymentOrders( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set PaymentOrders", exc );
@@ -240,7 +244,7 @@ public class FXDealRestController extends BaseSpringRestController {
 	public void removeFromPaymentOrders( 	@RequestBody(required=true) RemovePaymentOrdersFromFXDealCommand command )
 	{		
 		try {
-			FXDealService.getFXDealInstance().removeFromPaymentOrders( command );
+			service.removeFromPaymentOrders( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set PaymentOrders", exc );
@@ -254,6 +258,7 @@ public class FXDealRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected FXDeal fXDeal = null;
-    private static final Logger LOGGER = Logger.getLogger(FXDealRestController.class.getName());
+	protected FXDealService service = null;
+	private static final Logger LOGGER = Logger.getLogger(FXDealRestController.class.getName());
     
 }

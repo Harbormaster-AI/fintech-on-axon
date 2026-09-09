@@ -34,7 +34,7 @@ import org.axonframework.queryhandling.QueryGateway;
 import org.axonframework.queryhandling.QueryUpdateEmitter;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.springframework.stereotype.Service;
-
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
@@ -101,10 +101,16 @@ extends BaseService {
      * Default Constructor 
      */
     public PaymentOrderService()  {
-    	queryGateway 		= applicationContext.getBean(QueryGateway.class);
-    	commandGateway 		= applicationContext.getBean(CommandGateway.class);
-    	queryUpdateEmitter  = applicationContext.getBean(QueryUpdateEmitter.class);
-		validator			= applicationContext.getBean(PaymentOrderValidator.class);
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+		super.setApplicationContext(ctx);
+
+		queryGateway 		= ctx.getBean(QueryGateway.class);
+		commandGateway 		= ctx.getBean(CommandGateway.class);
+		queryUpdateEmitter  = ctx.getBean(QueryUpdateEmitter.class);
+		validator			= ctx.getBean(PaymentOrderValidator.class);
 	}
 
 
@@ -689,10 +695,10 @@ extends BaseService {
 //************************************************************************
 // Attributes
 //************************************************************************
-	private final QueryGateway queryGateway;
-	private final CommandGateway commandGateway;
-	private final QueryUpdateEmitter queryUpdateEmitter;
-	private final PaymentOrderValidator validator;
+	private QueryGateway queryGateway;
+	private CommandGateway commandGateway;
+	private QueryUpdateEmitter queryUpdateEmitter;
+	private PaymentOrderValidator validator;
 	private PaymentOrder paymentOrder 	= null;
     private static final Logger LOGGER 			= Logger.getLogger(PaymentOrderService.class.getName());
     

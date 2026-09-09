@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/FinancialInstitutionQuery")
 public class FinancialInstitutionQueryRestController extends BaseSpringRestController {
 	
+	public FinancialInstitutionQueryRestController( FinancialInstitutionService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a FinancialInstitution using a UUID
      * @param		UUID financialInstitutionId
@@ -95,7 +99,7 @@ public class FinancialInstitutionQueryRestController extends BaseSpringRestContr
     	FinancialInstitution entity = null;
 
     	try {  
-    		entity = FinancialInstitutionService.getFinancialInstitutionInstance().getFinancialInstitution( new FinancialInstitutionFetchOneSummary( financialInstitutionId ) );
+    		entity = service.getFinancialInstitution( new FinancialInstitutionFetchOneSummary( financialInstitutionId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load FinancialInstitution using Id " + financialInstitutionId );
@@ -115,7 +119,7 @@ public class FinancialInstitutionQueryRestController extends BaseSpringRestContr
         
     	try {
             // load the FinancialInstitution
-            financialInstitutionList = FinancialInstitutionService.getFinancialInstitutionInstance().getAllFinancialInstitution();
+            financialInstitutionList = service.getAllFinancialInstitution();
             
             if ( financialInstitutionList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all FinancialInstitutions" );
@@ -135,6 +139,7 @@ public class FinancialInstitutionQueryRestController extends BaseSpringRestContr
 // Attributes
 //************************************************************************
     protected FinancialInstitution financialInstitution = null;
+    protected FinancialInstitutionService service = null;
     private static final Logger LOGGER = Logger.getLogger(FinancialInstitutionQueryRestController.class.getName());
     
 }

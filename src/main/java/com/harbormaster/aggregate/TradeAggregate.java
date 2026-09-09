@@ -69,11 +69,11 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateTradeEvent</li>
  *      <li>DeleteTradeEvent</li>
    *       <li>AssignOrderToTradeEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignOrderFromTradeEvent</li>
   *       <li>AssignSecurityToTradeEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignSecurityFromTradeEvent</li>
   *       <li>AssignInvestmentAccountToTradeEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignInvestmentAccountFromTradeEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>
@@ -256,7 +256,7 @@ public class TradeAggregate {
     private java.math.BigDecimal quantity;
     private Money price;
     private Money fees;
-    private Date settlementDate;
+    private  Date settlementDate;
     private TradeOrder order = null;
     private Security security = null;
     private InvestmentAccount investmentAccount = null;

@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/ChargebackQuery")
 public class ChargebackQueryRestController extends BaseSpringRestController {
 	
+	public ChargebackQueryRestController( ChargebackService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a Chargeback using a UUID
      * @param		UUID chargebackId
@@ -95,7 +99,7 @@ public class ChargebackQueryRestController extends BaseSpringRestController {
     	Chargeback entity = null;
 
     	try {  
-    		entity = ChargebackService.getChargebackInstance().getChargeback( new ChargebackFetchOneSummary( chargebackId ) );
+    		entity = service.getChargeback( new ChargebackFetchOneSummary( chargebackId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Chargeback using Id " + chargebackId );
@@ -115,7 +119,7 @@ public class ChargebackQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the Chargeback
-            chargebackList = ChargebackService.getChargebackInstance().getAllChargeback();
+            chargebackList = service.getAllChargeback();
             
             if ( chargebackList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Chargebacks" );
@@ -135,6 +139,7 @@ public class ChargebackQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Chargeback chargeback = null;
+    protected ChargebackService service = null;
     private static final Logger LOGGER = Logger.getLogger(ChargebackQueryRestController.class.getName());
     
 }

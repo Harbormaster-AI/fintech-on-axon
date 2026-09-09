@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/InvestmentAccount")
 public class InvestmentAccountRestController extends BaseSpringRestController {
 
+	public InvestmentAccountRestController( InvestmentAccountService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a InvestmentAccount.  if not key provided, calls create, otherwise calls save
      * @param		InvestmentAccount	investmentAccount
@@ -94,7 +98,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = InvestmentAccountService.getInvestmentAccountInstance().createInvestmentAccount( command );
+			completableFuture = service.createInvestmentAccount( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateInvestmentAccountCommand
 			// -----------------------------------------------
-			completableFuture = InvestmentAccountService.getInvestmentAccountInstance().updateInvestmentAccount(command);;
+			completableFuture = service.updateInvestmentAccount(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "InvestmentAccountController:update() - successfully update InvestmentAccount - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteInvestmentAccountCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	InvestmentAccountService delegate = InvestmentAccountService.getInvestmentAccountInstance();
+        	InvestmentAccountService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted InvestmentAccount with key " + command.getInvestmentAccountId() );
@@ -155,7 +159,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
     	InvestmentAccount entity = null;
 
     	try {  
-    		entity = InvestmentAccountService.getInvestmentAccountInstance().getInvestmentAccount( new InvestmentAccountFetchOneSummary( uuid ) );   
+    		entity = service.getInvestmentAccount( new InvestmentAccountFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load InvestmentAccount using Id " + uuid );
@@ -175,7 +179,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
         
     	try {
             // load the InvestmentAccount
-            investmentAccountList = InvestmentAccountService.getInvestmentAccountInstance().getAllInvestmentAccount();
+            investmentAccountList = service.getAllInvestmentAccount();
             
             if ( investmentAccountList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all InvestmentAccounts" );
@@ -196,7 +200,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
 	@PutMapping("/assignPortfolio")
 	public void assignPortfolio( @RequestBody AssignPortfolioToInvestmentAccountCommand command ) {
 		try {
-			InvestmentAccountService.getInvestmentAccountInstance().assignPortfolio( command );   
+			service.assignPortfolio( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Portfolio", exc );
@@ -210,7 +214,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignPortfolio")
 	public void unAssignPortfolio( @RequestBody(required=true)  UnAssignPortfolioFromInvestmentAccountCommand command ) {
 		try {
-			InvestmentAccountService.getInvestmentAccountInstance().unAssignPortfolio( command );   
+			service.unAssignPortfolio( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Portfolio", exc );
@@ -225,7 +229,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
 	@PutMapping("/addToTrades")
 	public void addToTrades( @RequestBody(required=true) AssignTradesToInvestmentAccountCommand command ) {
 		try {
-			InvestmentAccountService.getInvestmentAccountInstance().addToTrades( command );   
+			service.addToTrades( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Trades", exc );
@@ -240,7 +244,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
 	public void removeFromTrades( 	@RequestBody(required=true) RemoveTradesFromInvestmentAccountCommand command )
 	{		
 		try {
-			InvestmentAccountService.getInvestmentAccountInstance().removeFromTrades( command );
+			service.removeFromTrades( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Trades", exc );
@@ -254,7 +258,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
 	@PutMapping("/addToOrders")
 	public void addToOrders( @RequestBody(required=true) AssignOrdersToInvestmentAccountCommand command ) {
 		try {
-			InvestmentAccountService.getInvestmentAccountInstance().addToOrders( command );   
+			service.addToOrders( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Orders", exc );
@@ -269,7 +273,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
 	public void removeFromOrders( 	@RequestBody(required=true) RemoveOrdersFromInvestmentAccountCommand command )
 	{		
 		try {
-			InvestmentAccountService.getInvestmentAccountInstance().removeFromOrders( command );
+			service.removeFromOrders( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Orders", exc );
@@ -283,6 +287,7 @@ public class InvestmentAccountRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected InvestmentAccount investmentAccount = null;
-    private static final Logger LOGGER = Logger.getLogger(InvestmentAccountRestController.class.getName());
+	protected InvestmentAccountService service = null;
+	private static final Logger LOGGER = Logger.getLogger(InvestmentAccountRestController.class.getName());
     
 }

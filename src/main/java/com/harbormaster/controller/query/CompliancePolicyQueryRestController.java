@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/CompliancePolicyQuery")
 public class CompliancePolicyQueryRestController extends BaseSpringRestController {
 	
+	public CompliancePolicyQueryRestController( CompliancePolicyService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a CompliancePolicy using a UUID
      * @param		UUID compliancePolicyId
@@ -95,7 +99,7 @@ public class CompliancePolicyQueryRestController extends BaseSpringRestControlle
     	CompliancePolicy entity = null;
 
     	try {  
-    		entity = CompliancePolicyService.getCompliancePolicyInstance().getCompliancePolicy( new CompliancePolicyFetchOneSummary( compliancePolicyId ) );
+    		entity = service.getCompliancePolicy( new CompliancePolicyFetchOneSummary( compliancePolicyId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load CompliancePolicy using Id " + compliancePolicyId );
@@ -115,7 +119,7 @@ public class CompliancePolicyQueryRestController extends BaseSpringRestControlle
         
     	try {
             // load the CompliancePolicy
-            compliancePolicyList = CompliancePolicyService.getCompliancePolicyInstance().getAllCompliancePolicy();
+            compliancePolicyList = service.getAllCompliancePolicy();
             
             if ( compliancePolicyList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all CompliancePolicys" );
@@ -135,6 +139,7 @@ public class CompliancePolicyQueryRestController extends BaseSpringRestControlle
 // Attributes
 //************************************************************************
     protected CompliancePolicy compliancePolicy = null;
+    protected CompliancePolicyService service = null;
     private static final Logger LOGGER = Logger.getLogger(CompliancePolicyQueryRestController.class.getName());
     
 }

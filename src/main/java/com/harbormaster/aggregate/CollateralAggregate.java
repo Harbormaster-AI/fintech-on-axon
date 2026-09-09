@@ -65,7 +65,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateCollateralEvent</li>
  *      <li>DeleteCollateralEvent</li>
    *       <li>AssignLoanToCollateralEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignLoanFromCollateralEvent</li>
    *        </ul>
  *
  * <p>@author Harbormaster Dev Team</p>

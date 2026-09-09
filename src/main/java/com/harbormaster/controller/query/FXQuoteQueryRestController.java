@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/FXQuoteQuery")
 public class FXQuoteQueryRestController extends BaseSpringRestController {
 	
+	public FXQuoteQueryRestController( FXQuoteService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a FXQuote using a UUID
      * @param		UUID fXQuoteId
@@ -95,7 +99,7 @@ public class FXQuoteQueryRestController extends BaseSpringRestController {
     	FXQuote entity = null;
 
     	try {  
-    		entity = FXQuoteService.getFXQuoteInstance().getFXQuote( new FXQuoteFetchOneSummary( fXQuoteId ) );
+    		entity = service.getFXQuote( new FXQuoteFetchOneSummary( fXQuoteId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load FXQuote using Id " + fXQuoteId );
@@ -115,7 +119,7 @@ public class FXQuoteQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the FXQuote
-            fXQuoteList = FXQuoteService.getFXQuoteInstance().getAllFXQuote();
+            fXQuoteList = service.getAllFXQuote();
             
             if ( fXQuoteList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all FXQuotes" );
@@ -135,6 +139,7 @@ public class FXQuoteQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected FXQuote fXQuote = null;
+    protected FXQuoteService service = null;
     private static final Logger LOGGER = Logger.getLogger(FXQuoteQueryRestController.class.getName());
     
 }

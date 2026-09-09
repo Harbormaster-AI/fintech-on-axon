@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Branch")
 public class BranchRestController extends BaseSpringRestController {
 
+	public BranchRestController( BranchService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Branch.  if not key provided, calls create, otherwise calls save
      * @param		Branch	branch
@@ -94,7 +98,7 @@ public class BranchRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = BranchService.getBranchInstance().createBranch( command );
+			completableFuture = service.createBranch( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class BranchRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateBranchCommand
 			// -----------------------------------------------
-			completableFuture = BranchService.getBranchInstance().updateBranch(command);;
+			completableFuture = service.updateBranch(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "BranchController:update() - successfully update Branch - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class BranchRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteBranchCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	BranchService delegate = BranchService.getBranchInstance();
+        	BranchService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Branch with key " + command.getBranchId() );
@@ -155,7 +159,7 @@ public class BranchRestController extends BaseSpringRestController {
     	Branch entity = null;
 
     	try {  
-    		entity = BranchService.getBranchInstance().getBranch( new BranchFetchOneSummary( uuid ) );   
+    		entity = service.getBranch( new BranchFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Branch using Id " + uuid );
@@ -175,7 +179,7 @@ public class BranchRestController extends BaseSpringRestController {
         
     	try {
             // load the Branch
-            branchList = BranchService.getBranchInstance().getAllBranch();
+            branchList = service.getAllBranch();
             
             if ( branchList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Branchs" );
@@ -196,7 +200,7 @@ public class BranchRestController extends BaseSpringRestController {
 	@PutMapping("/assignInstitution")
 	public void assignInstitution( @RequestBody AssignInstitutionToBranchCommand command ) {
 		try {
-			BranchService.getBranchInstance().assignInstitution( command );   
+			service.assignInstitution( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Institution", exc );
@@ -210,7 +214,7 @@ public class BranchRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignInstitution")
 	public void unAssignInstitution( @RequestBody(required=true)  UnAssignInstitutionFromBranchCommand command ) {
 		try {
-			BranchService.getBranchInstance().unAssignInstitution( command );   
+			service.unAssignInstitution( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Institution", exc );
@@ -225,6 +229,7 @@ public class BranchRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Branch branch = null;
-    private static final Logger LOGGER = Logger.getLogger(BranchRestController.class.getName());
+	protected BranchService service = null;
+	private static final Logger LOGGER = Logger.getLogger(BranchRestController.class.getName());
     
 }

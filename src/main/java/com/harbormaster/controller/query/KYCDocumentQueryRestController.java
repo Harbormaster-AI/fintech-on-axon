@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/KYCDocumentQuery")
 public class KYCDocumentQueryRestController extends BaseSpringRestController {
 	
+	public KYCDocumentQueryRestController( KYCDocumentService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a KYCDocument using a UUID
      * @param		UUID kYCDocumentId
@@ -95,7 +99,7 @@ public class KYCDocumentQueryRestController extends BaseSpringRestController {
     	KYCDocument entity = null;
 
     	try {  
-    		entity = KYCDocumentService.getKYCDocumentInstance().getKYCDocument( new KYCDocumentFetchOneSummary( kYCDocumentId ) );
+    		entity = service.getKYCDocument( new KYCDocumentFetchOneSummary( kYCDocumentId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load KYCDocument using Id " + kYCDocumentId );
@@ -115,7 +119,7 @@ public class KYCDocumentQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the KYCDocument
-            kYCDocumentList = KYCDocumentService.getKYCDocumentInstance().getAllKYCDocument();
+            kYCDocumentList = service.getAllKYCDocument();
             
             if ( kYCDocumentList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all KYCDocuments" );
@@ -135,6 +139,7 @@ public class KYCDocumentQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected KYCDocument kYCDocument = null;
+    protected KYCDocumentService service = null;
     private static final Logger LOGGER = Logger.getLogger(KYCDocumentQueryRestController.class.getName());
     
 }

@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Creditor")
 public class CreditorRestController extends BaseSpringRestController {
 
+	public CreditorRestController( CreditorService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Creditor.  if not key provided, calls create, otherwise calls save
      * @param		Creditor	creditor
@@ -94,7 +98,7 @@ public class CreditorRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = CreditorService.getCreditorInstance().createCreditor( command );
+			completableFuture = service.createCreditor( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class CreditorRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateCreditorCommand
 			// -----------------------------------------------
-			completableFuture = CreditorService.getCreditorInstance().updateCreditor(command);;
+			completableFuture = service.updateCreditor(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "CreditorController:update() - successfully update Creditor - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class CreditorRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteCreditorCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	CreditorService delegate = CreditorService.getCreditorInstance();
+        	CreditorService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Creditor with key " + command.getCreditorId() );
@@ -155,7 +159,7 @@ public class CreditorRestController extends BaseSpringRestController {
     	Creditor entity = null;
 
     	try {  
-    		entity = CreditorService.getCreditorInstance().getCreditor( new CreditorFetchOneSummary( uuid ) );   
+    		entity = service.getCreditor( new CreditorFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Creditor using Id " + uuid );
@@ -175,7 +179,7 @@ public class CreditorRestController extends BaseSpringRestController {
         
     	try {
             // load the Creditor
-            creditorList = CreditorService.getCreditorInstance().getAllCreditor();
+            creditorList = service.getAllCreditor();
             
             if ( creditorList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Creditors" );
@@ -197,7 +201,7 @@ public class CreditorRestController extends BaseSpringRestController {
 	@PutMapping("/addToMandates")
 	public void addToMandates( @RequestBody(required=true) AssignMandatesToCreditorCommand command ) {
 		try {
-			CreditorService.getCreditorInstance().addToMandates( command );   
+			service.addToMandates( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Mandates", exc );
@@ -212,7 +216,7 @@ public class CreditorRestController extends BaseSpringRestController {
 	public void removeFromMandates( 	@RequestBody(required=true) RemoveMandatesFromCreditorCommand command )
 	{		
 		try {
-			CreditorService.getCreditorInstance().removeFromMandates( command );
+			service.removeFromMandates( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Mandates", exc );
@@ -226,6 +230,7 @@ public class CreditorRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Creditor creditor = null;
-    private static final Logger LOGGER = Logger.getLogger(CreditorRestController.class.getName());
+	protected CreditorService service = null;
+	private static final Logger LOGGER = Logger.getLogger(CreditorRestController.class.getName());
     
 }

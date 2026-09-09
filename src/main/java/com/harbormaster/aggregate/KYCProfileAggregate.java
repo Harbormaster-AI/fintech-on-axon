@@ -86,7 +86,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateKYCProfileEvent</li>
  *      <li>DeleteKYCProfileEvent</li>
    *       <li>AssignCustomerToKYCProfileEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignCustomerFromKYCProfileEvent</li>
    *       <li>AssignDocumentsToKYCProfileEvent</li>
  *       <li>RemoveDocumentsFromKYCProfileEvent</li>
   *       <li>AssignScreeningsToKYCProfileEvent</li>

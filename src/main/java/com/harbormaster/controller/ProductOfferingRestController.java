@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/ProductOffering")
 public class ProductOfferingRestController extends BaseSpringRestController {
 
+	public ProductOfferingRestController( ProductOfferingService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a ProductOffering.  if not key provided, calls create, otherwise calls save
      * @param		ProductOffering	productOffering
@@ -94,7 +98,7 @@ public class ProductOfferingRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = ProductOfferingService.getProductOfferingInstance().createProductOffering( command );
+			completableFuture = service.createProductOffering( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class ProductOfferingRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateProductOfferingCommand
 			// -----------------------------------------------
-			completableFuture = ProductOfferingService.getProductOfferingInstance().updateProductOffering(command);;
+			completableFuture = service.updateProductOffering(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "ProductOfferingController:update() - successfully update ProductOffering - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class ProductOfferingRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteProductOfferingCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	ProductOfferingService delegate = ProductOfferingService.getProductOfferingInstance();
+        	ProductOfferingService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted ProductOffering with key " + command.getProductOfferingId() );
@@ -155,7 +159,7 @@ public class ProductOfferingRestController extends BaseSpringRestController {
     	ProductOffering entity = null;
 
     	try {  
-    		entity = ProductOfferingService.getProductOfferingInstance().getProductOffering( new ProductOfferingFetchOneSummary( uuid ) );   
+    		entity = service.getProductOffering( new ProductOfferingFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load ProductOffering using Id " + uuid );
@@ -175,7 +179,7 @@ public class ProductOfferingRestController extends BaseSpringRestController {
         
     	try {
             // load the ProductOffering
-            productOfferingList = ProductOfferingService.getProductOfferingInstance().getAllProductOffering();
+            productOfferingList = service.getAllProductOffering();
             
             if ( productOfferingList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all ProductOfferings" );
@@ -196,7 +200,7 @@ public class ProductOfferingRestController extends BaseSpringRestController {
 	@PutMapping("/assignInstitution")
 	public void assignInstitution( @RequestBody AssignInstitutionToProductOfferingCommand command ) {
 		try {
-			ProductOfferingService.getProductOfferingInstance().assignInstitution( command );   
+			service.assignInstitution( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Institution", exc );
@@ -210,7 +214,7 @@ public class ProductOfferingRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignInstitution")
 	public void unAssignInstitution( @RequestBody(required=true)  UnAssignInstitutionFromProductOfferingCommand command ) {
 		try {
-			ProductOfferingService.getProductOfferingInstance().unAssignInstitution( command );   
+			service.unAssignInstitution( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Institution", exc );
@@ -225,7 +229,7 @@ public class ProductOfferingRestController extends BaseSpringRestController {
 	@PutMapping("/addToPricingPlans")
 	public void addToPricingPlans( @RequestBody(required=true) AssignPricingPlansToProductOfferingCommand command ) {
 		try {
-			ProductOfferingService.getProductOfferingInstance().addToPricingPlans( command );   
+			service.addToPricingPlans( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set PricingPlans", exc );
@@ -240,7 +244,7 @@ public class ProductOfferingRestController extends BaseSpringRestController {
 	public void removeFromPricingPlans( 	@RequestBody(required=true) RemovePricingPlansFromProductOfferingCommand command )
 	{		
 		try {
-			ProductOfferingService.getProductOfferingInstance().removeFromPricingPlans( command );
+			service.removeFromPricingPlans( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set PricingPlans", exc );
@@ -254,6 +258,7 @@ public class ProductOfferingRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected ProductOffering productOffering = null;
-    private static final Logger LOGGER = Logger.getLogger(ProductOfferingRestController.class.getName());
+	protected ProductOfferingService service = null;
+	private static final Logger LOGGER = Logger.getLogger(ProductOfferingRestController.class.getName());
     
 }

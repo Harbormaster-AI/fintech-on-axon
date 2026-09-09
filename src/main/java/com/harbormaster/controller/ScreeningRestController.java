@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Screening")
 public class ScreeningRestController extends BaseSpringRestController {
 
+	public ScreeningRestController( ScreeningService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Screening.  if not key provided, calls create, otherwise calls save
      * @param		Screening	screening
@@ -94,7 +98,7 @@ public class ScreeningRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = ScreeningService.getScreeningInstance().createScreening( command );
+			completableFuture = service.createScreening( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class ScreeningRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateScreeningCommand
 			// -----------------------------------------------
-			completableFuture = ScreeningService.getScreeningInstance().updateScreening(command);;
+			completableFuture = service.updateScreening(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "ScreeningController:update() - successfully update Screening - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class ScreeningRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteScreeningCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	ScreeningService delegate = ScreeningService.getScreeningInstance();
+        	ScreeningService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Screening with key " + command.getScreeningId() );
@@ -155,7 +159,7 @@ public class ScreeningRestController extends BaseSpringRestController {
     	Screening entity = null;
 
     	try {  
-    		entity = ScreeningService.getScreeningInstance().getScreening( new ScreeningFetchOneSummary( uuid ) );   
+    		entity = service.getScreening( new ScreeningFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Screening using Id " + uuid );
@@ -175,7 +179,7 @@ public class ScreeningRestController extends BaseSpringRestController {
         
     	try {
             // load the Screening
-            screeningList = ScreeningService.getScreeningInstance().getAllScreening();
+            screeningList = service.getAllScreening();
             
             if ( screeningList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Screenings" );
@@ -196,7 +200,7 @@ public class ScreeningRestController extends BaseSpringRestController {
 	@PutMapping("/assignKycProfile")
 	public void assignKycProfile( @RequestBody AssignKycProfileToScreeningCommand command ) {
 		try {
-			ScreeningService.getScreeningInstance().assignKycProfile( command );   
+			service.assignKycProfile( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign KycProfile", exc );
@@ -210,7 +214,7 @@ public class ScreeningRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignKycProfile")
 	public void unAssignKycProfile( @RequestBody(required=true)  UnAssignKycProfileFromScreeningCommand command ) {
 		try {
-			ScreeningService.getScreeningInstance().unAssignKycProfile( command );   
+			service.unAssignKycProfile( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign KycProfile", exc );
@@ -225,7 +229,7 @@ public class ScreeningRestController extends BaseSpringRestController {
 	@PutMapping("/addToAlerts")
 	public void addToAlerts( @RequestBody(required=true) AssignAlertsToScreeningCommand command ) {
 		try {
-			ScreeningService.getScreeningInstance().addToAlerts( command );   
+			service.addToAlerts( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to add to Set Alerts", exc );
@@ -240,7 +244,7 @@ public class ScreeningRestController extends BaseSpringRestController {
 	public void removeFromAlerts( 	@RequestBody(required=true) RemoveAlertsFromScreeningCommand command )
 	{		
 		try {
-			ScreeningService.getScreeningInstance().removeFromAlerts( command );
+			service.removeFromAlerts( command );
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to remove from Set Alerts", exc );
@@ -254,6 +258,7 @@ public class ScreeningRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Screening screening = null;
-    private static final Logger LOGGER = Logger.getLogger(ScreeningRestController.class.getName());
+	protected ScreeningService service = null;
+	private static final Logger LOGGER = Logger.getLogger(ScreeningRestController.class.getName());
     
 }

@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/CardTokenizationQuery")
 public class CardTokenizationQueryRestController extends BaseSpringRestController {
 	
+	public CardTokenizationQueryRestController( CardTokenizationService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a CardTokenization using a UUID
      * @param		UUID cardTokenizationId
@@ -95,7 +99,7 @@ public class CardTokenizationQueryRestController extends BaseSpringRestControlle
     	CardTokenization entity = null;
 
     	try {  
-    		entity = CardTokenizationService.getCardTokenizationInstance().getCardTokenization( new CardTokenizationFetchOneSummary( cardTokenizationId ) );
+    		entity = service.getCardTokenization( new CardTokenizationFetchOneSummary( cardTokenizationId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load CardTokenization using Id " + cardTokenizationId );
@@ -115,7 +119,7 @@ public class CardTokenizationQueryRestController extends BaseSpringRestControlle
         
     	try {
             // load the CardTokenization
-            cardTokenizationList = CardTokenizationService.getCardTokenizationInstance().getAllCardTokenization();
+            cardTokenizationList = service.getAllCardTokenization();
             
             if ( cardTokenizationList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all CardTokenizations" );
@@ -135,6 +139,7 @@ public class CardTokenizationQueryRestController extends BaseSpringRestControlle
 // Attributes
 //************************************************************************
     protected CardTokenization cardTokenization = null;
+    protected CardTokenizationService service = null;
     private static final Logger LOGGER = Logger.getLogger(CardTokenizationQueryRestController.class.getName());
     
 }

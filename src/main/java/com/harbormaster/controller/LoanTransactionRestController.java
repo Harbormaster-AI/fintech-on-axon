@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/LoanTransaction")
 public class LoanTransactionRestController extends BaseSpringRestController {
 
+	public LoanTransactionRestController( LoanTransactionService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a LoanTransaction.  if not key provided, calls create, otherwise calls save
      * @param		LoanTransaction	loanTransaction
@@ -94,7 +98,7 @@ public class LoanTransactionRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = LoanTransactionService.getLoanTransactionInstance().createLoanTransaction( command );
+			completableFuture = service.createLoanTransaction( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class LoanTransactionRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateLoanTransactionCommand
 			// -----------------------------------------------
-			completableFuture = LoanTransactionService.getLoanTransactionInstance().updateLoanTransaction(command);;
+			completableFuture = service.updateLoanTransaction(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "LoanTransactionController:update() - successfully update LoanTransaction - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class LoanTransactionRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteLoanTransactionCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	LoanTransactionService delegate = LoanTransactionService.getLoanTransactionInstance();
+        	LoanTransactionService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted LoanTransaction with key " + command.getLoanTransactionId() );
@@ -155,7 +159,7 @@ public class LoanTransactionRestController extends BaseSpringRestController {
     	LoanTransaction entity = null;
 
     	try {  
-    		entity = LoanTransactionService.getLoanTransactionInstance().getLoanTransaction( new LoanTransactionFetchOneSummary( uuid ) );   
+    		entity = service.getLoanTransaction( new LoanTransactionFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load LoanTransaction using Id " + uuid );
@@ -175,7 +179,7 @@ public class LoanTransactionRestController extends BaseSpringRestController {
         
     	try {
             // load the LoanTransaction
-            loanTransactionList = LoanTransactionService.getLoanTransactionInstance().getAllLoanTransaction();
+            loanTransactionList = service.getAllLoanTransaction();
             
             if ( loanTransactionList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all LoanTransactions" );
@@ -196,7 +200,7 @@ public class LoanTransactionRestController extends BaseSpringRestController {
 	@PutMapping("/assignLoan")
 	public void assignLoan( @RequestBody AssignLoanToLoanTransactionCommand command ) {
 		try {
-			LoanTransactionService.getLoanTransactionInstance().assignLoan( command );   
+			service.assignLoan( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Loan", exc );
@@ -210,7 +214,7 @@ public class LoanTransactionRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignLoan")
 	public void unAssignLoan( @RequestBody(required=true)  UnAssignLoanFromLoanTransactionCommand command ) {
 		try {
-			LoanTransactionService.getLoanTransactionInstance().unAssignLoan( command );   
+			service.unAssignLoan( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Loan", exc );
@@ -225,6 +229,7 @@ public class LoanTransactionRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected LoanTransaction loanTransaction = null;
-    private static final Logger LOGGER = Logger.getLogger(LoanTransactionRestController.class.getName());
+	protected LoanTransactionService service = null;
+	private static final Logger LOGGER = Logger.getLogger(LoanTransactionRestController.class.getName());
     
 }

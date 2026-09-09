@@ -72,7 +72,7 @@ import org.springframework.context.annotation.Profile;
  *      <li>UpdateScreeningEvent</li>
  *      <li>DeleteScreeningEvent</li>
    *       <li>AssignKycProfileToScreeningEvent</li>
- *       $<li>{singleAssociation.getUnAssignFromEventAlias()}</li>
+ *       <li>UnAssignKycProfileFromScreeningEvent</li>
    *       <li>AssignAlertsToScreeningEvent</li>
  *       <li>RemoveAlertsFromScreeningEvent</li>
   *        </ul>

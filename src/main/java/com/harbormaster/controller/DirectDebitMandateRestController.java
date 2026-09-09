@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/DirectDebitMandate")
 public class DirectDebitMandateRestController extends BaseSpringRestController {
 
+	public DirectDebitMandateRestController( DirectDebitMandateService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a DirectDebitMandate.  if not key provided, calls create, otherwise calls save
      * @param		DirectDebitMandate	directDebitMandate
@@ -94,7 +98,7 @@ public class DirectDebitMandateRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = DirectDebitMandateService.getDirectDebitMandateInstance().createDirectDebitMandate( command );
+			completableFuture = service.createDirectDebitMandate( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class DirectDebitMandateRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateDirectDebitMandateCommand
 			// -----------------------------------------------
-			completableFuture = DirectDebitMandateService.getDirectDebitMandateInstance().updateDirectDebitMandate(command);;
+			completableFuture = service.updateDirectDebitMandate(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "DirectDebitMandateController:update() - successfully update DirectDebitMandate - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class DirectDebitMandateRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteDirectDebitMandateCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	DirectDebitMandateService delegate = DirectDebitMandateService.getDirectDebitMandateInstance();
+        	DirectDebitMandateService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted DirectDebitMandate with key " + command.getDirectDebitMandateId() );
@@ -155,7 +159,7 @@ public class DirectDebitMandateRestController extends BaseSpringRestController {
     	DirectDebitMandate entity = null;
 
     	try {  
-    		entity = DirectDebitMandateService.getDirectDebitMandateInstance().getDirectDebitMandate( new DirectDebitMandateFetchOneSummary( uuid ) );   
+    		entity = service.getDirectDebitMandate( new DirectDebitMandateFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load DirectDebitMandate using Id " + uuid );
@@ -175,7 +179,7 @@ public class DirectDebitMandateRestController extends BaseSpringRestController {
         
     	try {
             // load the DirectDebitMandate
-            directDebitMandateList = DirectDebitMandateService.getDirectDebitMandateInstance().getAllDirectDebitMandate();
+            directDebitMandateList = service.getAllDirectDebitMandate();
             
             if ( directDebitMandateList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all DirectDebitMandates" );
@@ -196,7 +200,7 @@ public class DirectDebitMandateRestController extends BaseSpringRestController {
 	@PutMapping("/assignAccount")
 	public void assignAccount( @RequestBody AssignAccountToDirectDebitMandateCommand command ) {
 		try {
-			DirectDebitMandateService.getDirectDebitMandateInstance().assignAccount( command );   
+			service.assignAccount( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Account", exc );
@@ -210,7 +214,7 @@ public class DirectDebitMandateRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignAccount")
 	public void unAssignAccount( @RequestBody(required=true)  UnAssignAccountFromDirectDebitMandateCommand command ) {
 		try {
-			DirectDebitMandateService.getDirectDebitMandateInstance().unAssignAccount( command );   
+			service.unAssignAccount( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Account", exc );
@@ -224,7 +228,7 @@ public class DirectDebitMandateRestController extends BaseSpringRestController {
 	@PutMapping("/assignCreditor")
 	public void assignCreditor( @RequestBody AssignCreditorToDirectDebitMandateCommand command ) {
 		try {
-			DirectDebitMandateService.getDirectDebitMandateInstance().assignCreditor( command );   
+			service.assignCreditor( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Creditor", exc );
@@ -238,7 +242,7 @@ public class DirectDebitMandateRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignCreditor")
 	public void unAssignCreditor( @RequestBody(required=true)  UnAssignCreditorFromDirectDebitMandateCommand command ) {
 		try {
-			DirectDebitMandateService.getDirectDebitMandateInstance().unAssignCreditor( command );   
+			service.unAssignCreditor( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Creditor", exc );
@@ -253,6 +257,7 @@ public class DirectDebitMandateRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected DirectDebitMandate directDebitMandate = null;
-    private static final Logger LOGGER = Logger.getLogger(DirectDebitMandateRestController.class.getName());
+	protected DirectDebitMandateService service = null;
+	private static final Logger LOGGER = Logger.getLogger(DirectDebitMandateRestController.class.getName());
     
 }

@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/InvestmentPortfolioQuery")
 public class InvestmentPortfolioQueryRestController extends BaseSpringRestController {
 	
+	public InvestmentPortfolioQueryRestController( InvestmentPortfolioService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a InvestmentPortfolio using a UUID
      * @param		UUID investmentPortfolioId
@@ -95,7 +99,7 @@ public class InvestmentPortfolioQueryRestController extends BaseSpringRestContro
     	InvestmentPortfolio entity = null;
 
     	try {  
-    		entity = InvestmentPortfolioService.getInvestmentPortfolioInstance().getInvestmentPortfolio( new InvestmentPortfolioFetchOneSummary( investmentPortfolioId ) );
+    		entity = service.getInvestmentPortfolio( new InvestmentPortfolioFetchOneSummary( investmentPortfolioId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load InvestmentPortfolio using Id " + investmentPortfolioId );
@@ -115,7 +119,7 @@ public class InvestmentPortfolioQueryRestController extends BaseSpringRestContro
         
     	try {
             // load the InvestmentPortfolio
-            investmentPortfolioList = InvestmentPortfolioService.getInvestmentPortfolioInstance().getAllInvestmentPortfolio();
+            investmentPortfolioList = service.getAllInvestmentPortfolio();
             
             if ( investmentPortfolioList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all InvestmentPortfolios" );
@@ -135,6 +139,7 @@ public class InvestmentPortfolioQueryRestController extends BaseSpringRestContro
 // Attributes
 //************************************************************************
     protected InvestmentPortfolio investmentPortfolio = null;
+    protected InvestmentPortfolioService service = null;
     private static final Logger LOGGER = Logger.getLogger(InvestmentPortfolioQueryRestController.class.getName());
     
 }

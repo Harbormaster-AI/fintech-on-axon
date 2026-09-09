@@ -100,7 +100,6 @@ public class CardTokenizationCommandRestController extends BaseSpringRestControl
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateCardTokenizationCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createCardTokenization( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class CardTokenizationCommandRestController extends BaseSpringRestControl
 		DeleteCardTokenizationCommand command = new DeleteCardTokenizationCommand( cardTokenizationId );
 
     	try {
-        	CardTokenizationService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted CardTokenization with key " + command.getCardTokenizationId() );
         }
         catch( Throwable exc ) {

@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/Position")
 public class PositionRestController extends BaseSpringRestController {
 
+	public PositionRestController( PositionService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a Position.  if not key provided, calls create, otherwise calls save
      * @param		Position	position
@@ -94,7 +98,7 @@ public class PositionRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = PositionService.getPositionInstance().createPosition( command );
+			completableFuture = service.createPosition( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class PositionRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdatePositionCommand
 			// -----------------------------------------------
-			completableFuture = PositionService.getPositionInstance().updatePosition(command);;
+			completableFuture = service.updatePosition(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "PositionController:update() - successfully update Position - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class PositionRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeletePositionCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	PositionService delegate = PositionService.getPositionInstance();
+        	PositionService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted Position with key " + command.getPositionId() );
@@ -155,7 +159,7 @@ public class PositionRestController extends BaseSpringRestController {
     	Position entity = null;
 
     	try {  
-    		entity = PositionService.getPositionInstance().getPosition( new PositionFetchOneSummary( uuid ) );   
+    		entity = service.getPosition( new PositionFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load Position using Id " + uuid );
@@ -175,7 +179,7 @@ public class PositionRestController extends BaseSpringRestController {
         
     	try {
             // load the Position
-            positionList = PositionService.getPositionInstance().getAllPosition();
+            positionList = service.getAllPosition();
             
             if ( positionList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all Positions" );
@@ -196,7 +200,7 @@ public class PositionRestController extends BaseSpringRestController {
 	@PutMapping("/assignPortfolio")
 	public void assignPortfolio( @RequestBody AssignPortfolioToPositionCommand command ) {
 		try {
-			PositionService.getPositionInstance().assignPortfolio( command );   
+			service.assignPortfolio( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Portfolio", exc );
@@ -210,7 +214,7 @@ public class PositionRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignPortfolio")
 	public void unAssignPortfolio( @RequestBody(required=true)  UnAssignPortfolioFromPositionCommand command ) {
 		try {
-			PositionService.getPositionInstance().unAssignPortfolio( command );   
+			service.unAssignPortfolio( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Portfolio", exc );
@@ -224,7 +228,7 @@ public class PositionRestController extends BaseSpringRestController {
 	@PutMapping("/assignSecurity")
 	public void assignSecurity( @RequestBody AssignSecurityToPositionCommand command ) {
 		try {
-			PositionService.getPositionInstance().assignSecurity( command );   
+			service.assignSecurity( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Security", exc );
@@ -238,7 +242,7 @@ public class PositionRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignSecurity")
 	public void unAssignSecurity( @RequestBody(required=true)  UnAssignSecurityFromPositionCommand command ) {
 		try {
-			PositionService.getPositionInstance().unAssignSecurity( command );   
+			service.unAssignSecurity( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Security", exc );
@@ -253,6 +257,7 @@ public class PositionRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected Position position = null;
-    private static final Logger LOGGER = Logger.getLogger(PositionRestController.class.getName());
+	protected PositionService service = null;
+	private static final Logger LOGGER = Logger.getLogger(PositionRestController.class.getName());
     
 }

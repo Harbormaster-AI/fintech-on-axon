@@ -100,7 +100,6 @@ public class UsageLimitCommandRestController extends BaseSpringRestController {
     public CompletableFuture<UUID> create( @RequestBody(required=true) CreateUsageLimitCommand command ) {
 		CompletableFuture<UUID> completableFuture = null;
 		try {
-
 			completableFuture = service.createUsageLimit( command );
         }
         catch( Throwable exc ) {
@@ -142,9 +141,7 @@ public class UsageLimitCommandRestController extends BaseSpringRestController {
 		DeleteUsageLimitCommand command = new DeleteUsageLimitCommand( usageLimitId );
 
     	try {
-        	UsageLimitService delegate = service;
-
-        	completableFuture = delegate.delete( command );
+        	completableFuture = service.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted UsageLimit with key " + command.getUsageLimitId() );
         }
         catch( Throwable exc ) {

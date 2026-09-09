@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/AppliedFee")
 public class AppliedFeeRestController extends BaseSpringRestController {
 
+	public AppliedFeeRestController( AppliedFeeService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a AppliedFee.  if not key provided, calls create, otherwise calls save
      * @param		AppliedFee	appliedFee
@@ -94,7 +98,7 @@ public class AppliedFeeRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = AppliedFeeService.getAppliedFeeInstance().createAppliedFee( command );
+			completableFuture = service.createAppliedFee( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class AppliedFeeRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateAppliedFeeCommand
 			// -----------------------------------------------
-			completableFuture = AppliedFeeService.getAppliedFeeInstance().updateAppliedFee(command);;
+			completableFuture = service.updateAppliedFee(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "AppliedFeeController:update() - successfully update AppliedFee - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class AppliedFeeRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteAppliedFeeCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	AppliedFeeService delegate = AppliedFeeService.getAppliedFeeInstance();
+        	AppliedFeeService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted AppliedFee with key " + command.getAppliedFeeId() );
@@ -155,7 +159,7 @@ public class AppliedFeeRestController extends BaseSpringRestController {
     	AppliedFee entity = null;
 
     	try {  
-    		entity = AppliedFeeService.getAppliedFeeInstance().getAppliedFee( new AppliedFeeFetchOneSummary( uuid ) );   
+    		entity = service.getAppliedFee( new AppliedFeeFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load AppliedFee using Id " + uuid );
@@ -175,7 +179,7 @@ public class AppliedFeeRestController extends BaseSpringRestController {
         
     	try {
             // load the AppliedFee
-            appliedFeeList = AppliedFeeService.getAppliedFeeInstance().getAllAppliedFee();
+            appliedFeeList = service.getAllAppliedFee();
             
             if ( appliedFeeList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all AppliedFees" );
@@ -196,7 +200,7 @@ public class AppliedFeeRestController extends BaseSpringRestController {
 	@PutMapping("/assignPaymentOrder")
 	public void assignPaymentOrder( @RequestBody AssignPaymentOrderToAppliedFeeCommand command ) {
 		try {
-			AppliedFeeService.getAppliedFeeInstance().assignPaymentOrder( command );   
+			service.assignPaymentOrder( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign PaymentOrder", exc );
@@ -210,7 +214,7 @@ public class AppliedFeeRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignPaymentOrder")
 	public void unAssignPaymentOrder( @RequestBody(required=true)  UnAssignPaymentOrderFromAppliedFeeCommand command ) {
 		try {
-			AppliedFeeService.getAppliedFeeInstance().unAssignPaymentOrder( command );   
+			service.unAssignPaymentOrder( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign PaymentOrder", exc );
@@ -224,7 +228,7 @@ public class AppliedFeeRestController extends BaseSpringRestController {
 	@PutMapping("/assignTransaction")
 	public void assignTransaction( @RequestBody AssignTransactionToAppliedFeeCommand command ) {
 		try {
-			AppliedFeeService.getAppliedFeeInstance().assignTransaction( command );   
+			service.assignTransaction( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign Transaction", exc );
@@ -238,7 +242,7 @@ public class AppliedFeeRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignTransaction")
 	public void unAssignTransaction( @RequestBody(required=true)  UnAssignTransactionFromAppliedFeeCommand command ) {
 		try {
-			AppliedFeeService.getAppliedFeeInstance().unAssignTransaction( command );   
+			service.unAssignTransaction( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign Transaction", exc );
@@ -253,6 +257,7 @@ public class AppliedFeeRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected AppliedFee appliedFee = null;
-    private static final Logger LOGGER = Logger.getLogger(AppliedFeeRestController.class.getName());
+	protected AppliedFeeService service = null;
+	private static final Logger LOGGER = Logger.getLogger(AppliedFeeRestController.class.getName());
     
 }

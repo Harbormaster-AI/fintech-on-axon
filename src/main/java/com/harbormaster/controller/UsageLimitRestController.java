@@ -84,6 +84,10 @@ import com.harbormaster.exception.*;
 @RequestMapping("/UsageLimit")
 public class UsageLimitRestController extends BaseSpringRestController {
 
+	public UsageLimitRestController( UsageLimitService service ) {
+		this.service = service;
+	}
+	
     /**
      * Handles create a UsageLimit.  if not key provided, calls create, otherwise calls save
      * @param		UsageLimit	usageLimit
@@ -94,7 +98,7 @@ public class UsageLimitRestController extends BaseSpringRestController {
 		CompletableFuture<UUID> completableFuture = null;
 		try {       
         	
-			completableFuture = UsageLimitService.getUsageLimitInstance().createUsageLimit( command );
+			completableFuture = service.createUsageLimit( command );
         }
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, exc.getMessage(), exc );        	
@@ -115,7 +119,7 @@ public class UsageLimitRestController extends BaseSpringRestController {
 			// -----------------------------------------------
 			// delegate the UpdateUsageLimitCommand
 			// -----------------------------------------------
-			completableFuture = UsageLimitService.getUsageLimitInstance().updateUsageLimit(command);;
+			completableFuture = service.updateUsageLimit(command);;
 	    }
 	    catch( Throwable exc ) {
 	    	LOGGER.log( Level.WARNING, "UsageLimitController:update() - successfully update UsageLimit - " + exc.getMessage());        	
@@ -133,7 +137,7 @@ public class UsageLimitRestController extends BaseSpringRestController {
     public CompletableFuture<Void> delete( @RequestBody(required=true) DeleteUsageLimitCommand command ) {                
     	CompletableFuture<Void> completableFuture = null;
     	try {
-        	UsageLimitService delegate = UsageLimitService.getUsageLimitInstance();
+        	UsageLimitService delegate = service;
 
         	completableFuture = delegate.delete( command );
     		LOGGER.log( Level.WARNING, "Successfully deleted UsageLimit with key " + command.getUsageLimitId() );
@@ -155,7 +159,7 @@ public class UsageLimitRestController extends BaseSpringRestController {
     	UsageLimit entity = null;
 
     	try {  
-    		entity = UsageLimitService.getUsageLimitInstance().getUsageLimit( new UsageLimitFetchOneSummary( uuid ) );   
+    		entity = service.getUsageLimit( new UsageLimitFetchOneSummary( uuid ) );   
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load UsageLimit using Id " + uuid );
@@ -175,7 +179,7 @@ public class UsageLimitRestController extends BaseSpringRestController {
         
     	try {
             // load the UsageLimit
-            usageLimitList = UsageLimitService.getUsageLimitInstance().getAllUsageLimit();
+            usageLimitList = service.getAllUsageLimit();
             
             if ( usageLimitList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all UsageLimits" );
@@ -196,7 +200,7 @@ public class UsageLimitRestController extends BaseSpringRestController {
 	@PutMapping("/assignPricingPlan")
 	public void assignPricingPlan( @RequestBody AssignPricingPlanToUsageLimitCommand command ) {
 		try {
-			UsageLimitService.getUsageLimitInstance().assignPricingPlan( command );   
+			service.assignPricingPlan( command );   
 		}
         catch( Throwable exc ) {
         	LOGGER.log( Level.WARNING, "Failed to assign PricingPlan", exc );
@@ -210,7 +214,7 @@ public class UsageLimitRestController extends BaseSpringRestController {
 	@PutMapping("/unAssignPricingPlan")
 	public void unAssignPricingPlan( @RequestBody(required=true)  UnAssignPricingPlanFromUsageLimitCommand command ) {
 		try {
-			UsageLimitService.getUsageLimitInstance().unAssignPricingPlan( command );   
+			service.unAssignPricingPlan( command );   
 		}
 		catch( Exception exc ) {
 			LOGGER.log( Level.WARNING, "Failed to unassign PricingPlan", exc );
@@ -225,6 +229,7 @@ public class UsageLimitRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected UsageLimit usageLimit = null;
-    private static final Logger LOGGER = Logger.getLogger(UsageLimitRestController.class.getName());
+	protected UsageLimitService service = null;
+	private static final Logger LOGGER = Logger.getLogger(UsageLimitRestController.class.getName());
     
 }

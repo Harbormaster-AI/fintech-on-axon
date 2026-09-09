@@ -85,6 +85,10 @@ import com.harbormaster.controller.*;
 @RequestMapping("/FeeScheduleQuery")
 public class FeeScheduleQueryRestController extends BaseSpringRestController {
 	
+	public FeeScheduleQueryRestController( FeeScheduleService service ) {
+        this.service = service;
+    }
+    
     /**
      * Handles loading a FeeSchedule using a UUID
      * @param		UUID feeScheduleId
@@ -95,7 +99,7 @@ public class FeeScheduleQueryRestController extends BaseSpringRestController {
     	FeeSchedule entity = null;
 
     	try {  
-    		entity = FeeScheduleService.getFeeScheduleInstance().getFeeSchedule( new FeeScheduleFetchOneSummary( feeScheduleId ) );
+    		entity = service.getFeeSchedule( new FeeScheduleFetchOneSummary( feeScheduleId ) );
         }
         catch( Throwable exc ) {
             LOGGER.log( Level.WARNING, "failed to load FeeSchedule using Id " + feeScheduleId );
@@ -115,7 +119,7 @@ public class FeeScheduleQueryRestController extends BaseSpringRestController {
         
     	try {
             // load the FeeSchedule
-            feeScheduleList = FeeScheduleService.getFeeScheduleInstance().getAllFeeSchedule();
+            feeScheduleList = service.getAllFeeSchedule();
             
             if ( feeScheduleList != null )
                 LOGGER.log( Level.INFO,  "successfully loaded all FeeSchedules" );
@@ -135,6 +139,7 @@ public class FeeScheduleQueryRestController extends BaseSpringRestController {
 // Attributes
 //************************************************************************
     protected FeeSchedule feeSchedule = null;
+    protected FeeScheduleService service = null;
     private static final Logger LOGGER = Logger.getLogger(FeeScheduleQueryRestController.class.getName());
     
 }
